@@ -20,10 +20,8 @@ $string['bigbluebuttonbn:join'] = 'Join a meeting';
 $string['bigbluebuttonbn:moderate'] = 'Moderate a meeting';
 $string['bigbluebuttonbnSalt'] = 'Security Salt';
 $string['bigbluebuttonbnUrl'] = 'BigBlueButton Server URL';
-$string['bigbluebuttonbnWait'] = 'User has to wait';
 $string['bigbluebuttonbnfieldset'] = 'Custom example fieldset';
 $string['bigbluebuttonbnintro'] = 'BigBlueButton Intro';
-$string['bigbluebuttonbnname'] = 'Virtual classroom name';
 $string['configsecuritysalt'] = 'The security salt of your BigBlueButton server.  (This default salt is for a BigBlueButton server provided by Blindside Networks that you can use for testing.)';
 $string['index_checksum_error'] =  'A checksum error occured. Make sure you entered the correct salt.';
 $string['index_confirm_end'] = 'Do you wish to end the virtual class?';
@@ -45,5 +43,27 @@ $string['serverhost'] = 'Server Name';
 $string['view_login_moderator'] = 'Logging in as moderator ...';
 $string['view_login_viewer'] = 'Logging in as viewer ...';
 $string['view_wait'] = 'The virtual class has not yet started.  Waiting until a moderator joins ...';
+
+$string['mod_form_block_general'] = 'General settings';
+$string['mod_form_block_record'] = 'Record settings';
+$string['mod_form_block_schedule'] = 'Schedule for sessions';
+$string['mod_form_field_availabledate'] = 'Join open';
+$string['mod_form_field_description'] = 'Description of recorded session';
+$string['mod_form_field_duedate'] = 'Join closed';
+$string['mod_form_field_duration_help'] = 'Setting the duration for a meeting will establish the maximum time for a meeting to keep alive before the recording finish';
+$string['mod_form_field_duration'] = 'Duration';
+$string['mod_form_field_limitusers'] = 'Limit users';
+$string['mod_form_field_limitusers_help'] = 'Maximum limit of users allowed in a meeting';
+$string['mod_form_field_name'] = 'Virtual classroom name';
+$string['mod_form_field_newwindow'] = 'Open BigBlueButton in a new window';
+$string['mod_form_field_record'] = 'Record';
+$string['mod_form_field_voicebridge_help'] = 'Voice conference number that participants enter to join the voice conference.';
+$string['mod_form_field_voicebridge'] = 'Voice bridge';
+$string['mod_form_field_wait'] = 'Students must wait until a moderator joins';
+$string['mod_form_field_welcome_default'] = '<br>Welcome to <b>%%CONFNAME%%</b>!<br><br>To understand how BigBlueButton works see our <a href="event:http://www.bigbluebutton.org/content/videos"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the headset icon (upper-left hand corner). <b>Please use a headset to avoid causing noise for others.</b>';
+$string['mod_form_field_welcome_help'] = 'Replaces the default message setted up for the BigBlueButton server. The message can includes keywords  (%%CONFNAME%%, %%DIALNUM%%, %%CONFNUM%%) which will be substituted automatically, and also html tags like <b>...</b> or <i></i> ';
+$string['mod_form_field_welcome'] = 'Welcome message';
+
+
 
 ?>

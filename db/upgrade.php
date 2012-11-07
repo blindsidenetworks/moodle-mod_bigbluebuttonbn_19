@@ -37,11 +37,11 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         add_field($table, $field, $continue=true, $feedback=true);
         
         $field = new XMLDBField('description');
-        $field->setAttributes(XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, null, null);
+        $field->setAttributes(XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, null, '');
         add_field($table, $field, $continue=true, $feedback=true);
 
         $field = new XMLDBField('welcome');
-        $field->setAttributes(XMLDB_TYPE_TEXT, 'medium', null, XMLDB_NOTNULL, null, null, null, null);
+        $field->setAttributes(XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null, null, '');
         add_field($table, $field, $continue=true, $feedback=true);
 
         $field = new XMLDBField('voicebridge');
@@ -79,7 +79,18 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         /// Launch create table for bigbluebuttonbn_log
         $result = $result && create_table($table);
     }
-        
+
+    //if ($result && $oldversion < 2012110720) {
+    //    ///////// bigbluebuttonbn
+    //    /// Define table bigbluebuttonbn to be modified
+    //    $table = new XMLDBTable('bigbluebuttonbn');
+    //
+    //    $field = new XMLDBField('welcome');
+    //    $field->setAttributes(XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null, null, '');
+    //    add_field($table, $field, $continue=true, $feedback=true);
+    //    
+    //}
+    
     return $result;
 }
 

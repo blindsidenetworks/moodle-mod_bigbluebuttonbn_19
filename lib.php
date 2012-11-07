@@ -209,25 +209,4 @@ function bigbluebuttonbn_uninstall() {
     return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////
-/// Any other bigbluebuttonbn functions go here.  Each of them must have a name that
-/// starts with bigbluebuttonbn_
-/// Remember (see note in first lines) that, if this section grows, it's HIGHLY
-/// recommended to move all funcions below to a new "localib.php" file.
-
-# function taken from http://www.php.net/manual/en/function.mt-rand.php
-# modified by Sebastian Schneider
-# credits go to www.mrnaz.com
-function bigbluebuttonbn_rand_string($len, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-{
-    $string = '';
-    for ($i = 0; $i < $len; $i++)
-    {
-        $pos = rand(0, strlen($chars)-1);
-        $string .= $chars{$pos};
-    }
-    return (sha1($string));
-}
-
 ?>
