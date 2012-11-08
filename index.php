@@ -76,8 +76,8 @@ if ($course->format == 'weeks') {
 }
 
 
-$salt = trim($CFG->BigBlueButtonSecuritySalt);
-$url = trim(trim($CFG->BigBlueButtonServerURL),'/').'/';
+$salt = trim($CFG->bigbluebuttonbnSecuritySalt);
+$url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
 $logoutURL = $CFG->wwwroot;
 
 if( isset($_POST['submit']) && $_POST['submit'] == 'end' ) { 

@@ -12,7 +12,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 
-require_once('bbb_api/bbb_api.php');
+defined('MOODLE_INTERNAL') || die;
+
+require_once($CFG->dirroot.'/calendar/lib.php');
 
 
 /**
@@ -82,20 +84,15 @@ function bigbluebuttonbn_delete_instance($id) {
 
     $result = true;
 
-    //
-	// End the session associated with this instance (if it's running)
-	//
-	$meetingID = $bigbluebuttonbn->meetingid;
-	$modPW = $bigbluebuttonbn->moderatorpass;
-	$url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
-	$salt = trim($CFG->bigbluebuttonbnSecuritySalt);
-
-	$getArray = BigBlueButtonBN::endMeeting( $meetingID, $modPW, $url, $salt );
+    ////
+	//// End the session associated with this instance (if it's running)
+	////
+	//$meetingID = $bigbluebuttonbn->meetingid;
+	//$modPW = $bigbluebuttonbn->moderatorpass;
+	//$url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
+	//$salt = trim($CFG->bigbluebuttonbnSecuritySalt);
 	
     if (! delete_records('bigbluebuttonbn', 'id', $bigbluebuttonbn->id)) {
-    	//echo $endURL = '<a href='.BBBMeeting::endMeeting( $mToken, "mp", getBBBServerIP(), $salt ).'>'."End Meeting".'</a>';
-#switch to remove the meetingname
-#    	  BBBMeeting::endMeeting( $bigbluebuttonbn->, "mp", getBBBServerIP(), $bigbluebuttonbn->salt );
         $result = false;
     }
 

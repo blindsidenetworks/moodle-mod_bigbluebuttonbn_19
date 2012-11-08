@@ -12,7 +12,7 @@
  */
 
 
-$module->version  = 2012110716;  // The current module version (Date: YYYYMMDDXX)
+$module->version  = 2012110717;  // The current module version (Date: YYYYMMDDXX)
 $module->requires = 2007101509;  // The current module version (Date: YYYYMMDDXX)
 $module->cron     = 0;           // Period for cron to check this module (secs)
 $module->component = 'mod_bigbluebuttonbn';

@@ -17,8 +17,8 @@ require_once(dirname(__FILE__).'/lib.php');
 
 $name = $_GET['name'];
 
-$salt = trim($CFG->BigBlueButtonSecuritySalt);
-$url = trim(trim($CFG->BigBlueButtonServerURL),'/').'/';
+$salt = trim($CFG->bigbluebuttonbnSecuritySalt);
+$url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
 
-echo BigBlueButtonBN::getMeetingXML( $name, $url, $salt );
+echo bigbluebuttonbn_getMeetingXML( $name, $url, $salt );
 ?>

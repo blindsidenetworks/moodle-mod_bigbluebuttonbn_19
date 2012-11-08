@@ -267,7 +267,6 @@ function bigbluebuttonbn_getServerVersion( $URL ){
         return $xml->version;
     else
         return NULL;
-
 }
 
 function bigbluebuttonbn_getMeetingXML( $meetingID, $URL, $SALT ) {
