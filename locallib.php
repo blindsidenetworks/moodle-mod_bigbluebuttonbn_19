@@ -27,7 +27,6 @@ function bigbluebuttonbn_rand_string($len, $chars = 'abcdefghijklmnopqrstuvwxyzA
 }
 
 function bigbluebuttonbn_log(array $bbbsession, $event) {
-    global $DB;
     
     $log = new stdClass();
     
@@ -38,7 +37,7 @@ function bigbluebuttonbn_log(array $bbbsession, $event) {
     $log->timecreated = time();
     $log->event = $event;
     
-    $returnid = $DB->insert_record('bigbluebuttonbn_log', $log);
+    $returnid = insert_record('bigbluebuttonbn_log', $log);
     
 }
  ////////////////////////////

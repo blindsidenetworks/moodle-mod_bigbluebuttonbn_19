@@ -12,11 +12,11 @@
  */
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
-require_once(dirname(__FILE__).'/lib.php');
+require_once(dirname(__FILE__).'/locallib.php');
 
-
-$id = required_param('id', PARAM_INT);    // Course Module ID, or
-$a  = optional_param('a', 0, PARAM_INT);  // bigbluebuttonbn instance ID
+$id = required_param('id', PARAM_INT);      // Course Module ID, or
+$a  = optional_param('a', 0, PARAM_INT);    // bigbluebuttonbn instance ID
+$g  = optional_param('g', 0, PARAM_INT);    // group instance ID
 
 
 if (! $course = get_record('course', 'id', $id)) {
@@ -92,7 +92,7 @@ if( isset($_POST['submit']) && $_POST['submit'] == 'end' ) {
 	$meetingID = $bigbluebuttonbn->meetingid;
 	$modPW = $bigbluebuttonbn->moderatorpass;
 
-	$getArray = BigBlueButtonBN::endMeeting( $meetingID, $modPW, $url, $salt );
+	$getArray = bigbluebuttonbn_endMeeting( $meetingID, $modPW, $url, $salt );
 	// print_object( $getArray );
 	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string( 16 );
 	if (! update_record('bigbluebuttonbn', $bigbluebuttonbn) ) {
@@ -102,10 +102,8 @@ if( isset($_POST['submit']) && $_POST['submit'] == 'end' ) {
 	}
 }
 
-// print_object( $bigbluebuttonbns );
-
 foreach ($bigbluebuttonbns as $bigbluebuttonbn) {
-	$info = null;
+    $info = null;
 	$joinURL = null;
 	$user = null;
 	$result = null;
@@ -128,14 +126,11 @@ foreach ($bigbluebuttonbns as $bigbluebuttonbn) {
 		$joinURL = '<a href="view.php?id='.$bigbluebuttonbn->coursemodule.'">'.format_string($bigbluebuttonbn->name).'</a>';
 		// $status = $bigbluebuttonbn->meetingid;
 
-		//echo "XX";
-
 		//
 		// Output Users in the meeting
 		//
-		$getArray = BigBlueButtonBN::getMeetingInfoArray( $bigbluebuttonbn->meetingid, $modPW, $url, $salt );
-
-		// print_object( $getArray );
+		$getArray = bigbluebuttonbn_getMeetingInfoArray( $bigbluebuttonbn->meetingid, $modPW, $url, $salt );
+		//print_object( $getArray );
 
 		if (!$getArray) {
 			//

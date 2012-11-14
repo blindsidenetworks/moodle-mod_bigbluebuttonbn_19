@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Language File
  *
@@ -12,9 +11,15 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 
+$string['bbbduetimeoverstartingtime'] = 'The due time for this activity must be greater than the starting time';
+$string['bbbdurationwarning'] = 'The maximum duration for this session is %duration% minutes.';
+$string['bbbfinished'] = 'This activity is over.';
+$string['bbbinprocess'] = 'This activity is in process.';
+$string['bbbnorecordings'] = 'There is no recording yet, please come back later.';
+$string['bbbnotavailableyet'] = 'Sorry, this session is not yet available.';
+$string['bbbrecordwarning'] = 'This session is being recorded.';
+$string['bbburl'] = 'The URL of your BigBlueButton server must end with /bigbluebutton/. (This default URL is for a BigBlueButton server provided by Blindside Networks that you can use for testing.)';
 
-$string['bbburl'] = 'The URL of your BigBlueButton server must end with /bigbluebutton/.  (This default URL is for a BigBlueButton server provided by Blindside Networks that you can use for testing.)';
-$string['bbbuserwait'] = 'Students must wait until a moderator joins?';
 $string['bigbluebuttonbn'] = 'BigBlueButtonBN';
 $string['bigbluebuttonbn:join'] = 'Join a meeting';
 $string['bigbluebuttonbn:moderate'] = 'Moderate a meeting';

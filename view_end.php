@@ -15,34 +15,59 @@ require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/locallib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // course_module ID, or
-$b  = optional_param('n', 0, PARAM_INT);  // bigbluebuttonbn instance ID
+$a  = optional_param('a', 0, PARAM_INT);  // bigbluebuttonbn instance ID
 
 if ($id) {
-    $cm         = get_coursemodule_from_id('bigbluebuttonbn', $id, 0, false, MUST_EXIST);
-    $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $bigbluebuttonbn  = $DB->get_record('bigbluebuttonbn', array('id' => $cm->instance), '*', MUST_EXIST);
-} elseif ($b) {
-    $bigbluebuttonbn  = $DB->get_record('bigbluebuttonbn', array('id' => $n), '*', MUST_EXIST);
-    $course     = $DB->get_record('course', array('id' => $bigbluebuttonbn->course), '*', MUST_EXIST);
-    $cm         = get_coursemodule_from_instance('bigbluebuttonbn', $bigbluebuttonbn->id, $course->id, false, MUST_EXIST);
+    if (! $cm = get_coursemodule_from_id('bigbluebuttonbn', $id)) {
+        error('Course Module ID was incorrect');
+    }
+
+    if (! $course = get_record('course', 'id', $cm->course)) {
+        error('Course is misconfigured');
+    }
+
+    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $cm->instance)) {
+        error('Course module is incorrect');
+    }
+
+} else if ($a) {
+    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $a)) {
+        error('Course module is incorrect');
+    }
+    if (! $course = get_record('course', 'id', $bigbluebuttonbn->course)) {
+        error('Course is misconfigured');
+    }
+    if (! $cm = get_coursemodule_from_instance('bigbluebuttonbn', $bigbluebuttonbn->id, $course->id)) {
+        error('Course Module ID was incorrect');
+    }
+
 } else {
     error('You must specify a course_module ID or an instance ID');
 }
 
 require_login($course, true, $cm);
-
 $context = get_context_instance(CONTEXT_MODULE, $cm->id);
-$PAGE->set_context($context);
 
-$PAGE->set_url('/mod/bigbluebuttonbn/view_end.php', array('id' => $cm->id));
+/// Print the page header
+$strbigbluebuttonbns = get_string('modulenameplural', 'bigbluebuttonbn');
+$strbigbluebuttonbn  = get_string('modulename', 'bigbluebuttonbn');
 
+$navlinks = array();
+$navlinks[] = array('name' => $strbigbluebuttonbns, 'link' => "index.php?id=$course->id", 'type' => 'activity');
+$navlinks[] = array('name' => format_string($bigbluebuttonbn->name), 'link' => '', 'type' => 'activityinstance');
+
+$navigation = build_navigation($navlinks);
 
 if ( $bigbluebuttonbn->newwindow == 1 ){
-    echo $OUTPUT->header();
+    print_header_simple(format_string($bigbluebuttonbn->name), '', $navigation, '', '', true,
+    update_module_button($cm->id, $course->id, $strbigbluebuttonbn), navmenu($course, $cm));
+    echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/bigbluebuttonbn.js"></script>'."\n";
     
-    $PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.viewend_CloseWindow');
+    echo '<script type="text/javascript" >self.close();</script>'."\n";
     
-    echo $OUTPUT->footer();
+    //$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.viewend_CloseWindow');
+    
+    print_footer($course);
         
 } else {
     if( has_capability('mod/bigbluebuttonbn:moderate', $context) )

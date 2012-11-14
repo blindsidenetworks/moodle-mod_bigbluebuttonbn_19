@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Join a room.
  *
@@ -38,8 +37,33 @@ function bigbluebuttonbn_add_instance($bigbluebuttonbn) {
 	$bigbluebuttonbn->moderatorpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->viewerpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string( 16 );
-
-	return insert_record('bigbluebuttonbn', $bigbluebuttonbn);
+	
+	if (! isset($bigbluebuttonbn->newwindow))   $bigbluebuttonbn->newwindow = 0;
+	if (! isset($bigbluebuttonbn->wait))        $bigbluebuttonbn->wait = 0;
+	if (! isset($bigbluebuttonbn->record))      $bigbluebuttonbn->record = 0;
+	
+	$returnid = insert_record('bigbluebuttonbn', $bigbluebuttonbn);
+	
+	if (isset($bigbluebuttonbn->timeavailable) && $bigbluebuttonbn->timeavailable ){
+	    $event = NULL;
+	    $event->name        = $bigbluebuttonbn->name;
+	    $event->courseid    = $bigbluebuttonbn->course;
+	    $event->groupid     = 0;
+	    $event->userid      = 0;
+	    $event->modulename  = 'bigbluebuttonbn';
+	    $event->instance    = $returnid;
+	    $event->timestart   = $bigbluebuttonbn->timeavailable;
+	
+	    if ( $bigbluebuttonbn->timedue ){
+	        $event->timeduration = $bigbluebuttonbn->timedue - $bigbluebuttonbn->timeavailable;
+	    } else {
+	        $event->timeduration = 0;
+	    }
+	
+	    calendar_event::create($event);
+	}
+	
+	return $returnid;
 }
 
 
@@ -56,14 +80,46 @@ function bigbluebuttonbn_update_instance($bigbluebuttonbn) {
     $bigbluebuttonbn->timemodified = time();
     $bigbluebuttonbn->id = $bigbluebuttonbn->instance;
 
-	if (! isset($bigbluebuttonbn->wait)) {
-		$bigbluebuttonbn->wait = 0;
-	}
+    if (! isset($bigbluebuttonbn->newwindow))   $bigbluebuttonbn->newwindow = 0;
+    if (! isset($bigbluebuttonbn->wait))        $bigbluebuttonbn->wait = 0;
+    if (! isset($bigbluebuttonbn->record))      $bigbluebuttonbn->record = 0;
+    
+    update_record('bigbluebuttonbn', $bigbluebuttonbn);
+    
+    if (isset($bigbluebuttonbn->timeavailable) && $bigbluebuttonbn->timeavailable ){
+        $event = new stdClass();
+        $event->name        = $bigbluebuttonbn->name;
+        $event->courseid    = $bigbluebuttonbn->course;
+        $event->groupid     = 0;
+        $event->userid      = 0;
+        $event->modulename  = 'bigbluebuttonbn';
+        $event->instance    = $bigbluebuttonbn->id;
+        $event->timestart   = $bigbluebuttonbn->timeavailable;
 
+        if ( $bigbluebuttonbn->timedue ){
+            $event->timeduration = $bigbluebuttonbn->timedue - $bigbluebuttonbn->timeavailable;
+            
+        } else {
+            $event->timeduration = 0;
+            
+        }
 
-    # You may have to add extra stuff in here #
-
-    return update_record('bigbluebuttonbn', $bigbluebuttonbn);
+        if ($event->id = get_field('event', 'id', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id))) {
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->update($event);
+            
+        } else {
+            calendar_event::create($event);
+            
+        }
+        
+    } else {
+        delete_records('event', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id));
+        
+    }
+    
+    return true;
+   
 }
 
 
@@ -84,18 +140,26 @@ function bigbluebuttonbn_delete_instance($id) {
 
     $result = true;
 
-    ////
-	//// End the session associated with this instance (if it's running)
-	////
-	//$meetingID = $bigbluebuttonbn->meetingid;
-	//$modPW = $bigbluebuttonbn->moderatorpass;
-	//$url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
-	//$salt = trim($CFG->bigbluebuttonbnSecuritySalt);
-	
+    //
+    // End the session associated with this instance (if it's running)
+    //
+    $meetingID = $bigbluebuttonbn->meetingid.'-'.$bigbluebuttonbn->course.'-'.$bigbluebuttonbn->id;
+    
+    $modPW = $bigbluebuttonbn->moderatorpass;
+    $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
+    $salt = trim($CFG->BigBlueButtonBNSecuritySalt);
+
+    //if( bigbluebuttonbn_isMeetingRunning($meetingID, $url, $salt) )
+    //    $getArray = bigbluebuttonbn_doEndMeeting( $meetingID, $modPW, $url, $salt );
+    	
     if (! delete_records('bigbluebuttonbn', 'id', $bigbluebuttonbn->id)) {
         $result = false;
     }
-
+    
+    if (! delete_records('event', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id))) {
+        $result = false;
+    }
+    
     return $result;
 }
 
@@ -111,7 +175,7 @@ function bigbluebuttonbn_delete_instance($id) {
  * @todo Finish documenting this function
  */
 function bigbluebuttonbn_user_outline($course, $user, $mod, $bigbluebuttonbn) {
-    return $return;
+    return true;
 }
 
 
@@ -163,10 +227,16 @@ function bigbluebuttonbn_cron () {
  * @return mixed boolean/array of students
  */
 function bigbluebuttonbn_get_participants($bigbluebuttonbnid) {
-    global $CFG;
     return false;
 }
 
+/**
+ * Returns all other caps used in module
+ * @return array
+ */
+function bigbluebuttonbn_get_extra_capabilities() {
+    return array('moodle/site:accessallgroups');
+}
 
 /**
  * Checks if scale is being used by any instance of bigbluebuttonbn.
@@ -204,6 +274,36 @@ function bigbluebuttonbn_install() {
  */
 function bigbluebuttonbn_uninstall() {
     return true;
+}
+
+/**
+ * Given a course_module object, this function returns any
+ * "extra" information that may be needed when printing
+ * this activity in a course listing.
+ * See get_array_of_activities() in course/lib.php
+ *
+ * @global object
+ * @param object $coursemodule
+ * @return object|null
+ */
+function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
+    global $CFG;
+    
+    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $coursemodule->instance) ) {
+        $info = null;
+    } else {
+        $info = new object();
+        $info->name  = $bigbluebuttonbn->name;
+        
+        if ( $bigbluebuttonbn->newwindow == 1 ){
+            $info->extra = "onclick=\"window.open('".$CFG->wwwroot."/mod/bigbluebuttonbn/view.php?id=".$coursemodule->id."&amp;redirect=1'); return false;\"";
+        
+        }
+        
+    }
+    
+    return $info;
+
 }
 
 ?>
