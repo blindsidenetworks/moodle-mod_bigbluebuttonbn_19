@@ -279,16 +279,6 @@ function bigbluebuttonbn_getMeetingXML( $meetingID, $URL, $SALT ) {
 function bigbluebuttonbn_wrap_simplexml_load_file($url){
     
     if (extension_loaded('curl')) {
-        /* This code need to be reviewed 
-        $c = new curl();
-        $c->setopt( Array( "SSL_VERIFYPEER" => true));
-        $response = $c->get($url);
-
-        if($response)
-            return (new SimpleXMLElement($response, LIBXML_NOCDATA));
-        else
-            return false;
-        */
         $ch = curl_init() or die ( curl_error() );
         $timeout = 10;
         curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -298,10 +288,16 @@ function bigbluebuttonbn_wrap_simplexml_load_file($url){
         $data = curl_exec( $ch );
         curl_close( $ch );
         
-        if($data)
-            return (new SimpleXMLElement($data,LIBXML_NOCDATA));
-        else
+        if($data) {
+            try{
+                $simpleXMLElement = new SimpleXMLElement($data,LIBXML_NOCDATA);
+                return $simpleXMLElement;
+            }catch(Exception $e){
+                return false;
+            }
+        } else {
             return false;
+        }
         
     } else {
         return (simplexml_load_file($url,'SimpleXMLElement', LIBXML_NOCDATA));

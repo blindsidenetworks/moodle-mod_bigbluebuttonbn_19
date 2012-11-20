@@ -289,8 +289,8 @@ function bigbluebuttonbn_uninstall() {
 function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     global $CFG;
     
-    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $coursemodule->instance) ) {
-        $info = null;
+    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $coursemodule->instance, '', '', '', '', 'id, name, newwindow')) {
+        return false;
     } else {
         $info = new object();
         $info->name  = $bigbluebuttonbn->name;
@@ -299,10 +299,8 @@ function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
             $info->extra = "onclick=\"window.open('".$CFG->wwwroot."/mod/bigbluebuttonbn/view.php?id=".$coursemodule->id."&amp;redirect=1'); return false;\"";
         
         }
-        
+        return $info;
     }
-    
-    return $info;
 
 }
 

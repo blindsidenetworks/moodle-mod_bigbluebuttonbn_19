@@ -21,7 +21,7 @@ if ($id) {
     if (! $cm = get_coursemodule_from_id('bigbluebuttonbn', $id)) {
         error('Course Module ID was incorrect');
     }
-
+    
     if (! $course = get_record('course', 'id', $cm->course)) {
         error('Course is misconfigured');
     }
@@ -80,9 +80,6 @@ if ( !isset($serverVersion) ) { //Server is not working
     }
 }
 
-
-
-
 /// Print the page header
 $strbigbluebuttonbns = get_string('modulenameplural', 'bigbluebuttonbn');
 $strbigbluebuttonbn  = get_string('modulename', 'bigbluebuttonbn');
@@ -113,7 +110,7 @@ $bbbsession['textflag']['administrator'] = $administrator? 'true': 'false';
 //Database info related to the activity
 $bbbsession['meetingname'] = $bigbluebuttonbn->name;
 $bbbsession['welcome'] = $bigbluebuttonbn->welcome;
-if( !isset($bbbsession['welcome']) || $bbbsession['welcome'] == '') {
+if( !isset($bbbsession['welcome']) || $bbbsession['welcome'] == null || $bbbsession['welcome'] == '') {
     $bbbsession['welcome'] = get_string('mod_form_field_welcome_default', 'bigbluebuttonbn'); 
 }
 
@@ -200,7 +197,6 @@ else
 //
 // BigBlueButton Setup Ends
 //
-
 
 echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/libs/jquery/1.7.2/jquery.min.js"></script>'."\n";
 echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/libs/heartbeat/0.1.1/heartbeat.js"></script>'."\n";
@@ -328,6 +324,7 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
         echo '<script type="text/javascript" >var joining = "true";</script>'."\n";
 
         print "<div align='center'>";
+        print "<!-- IsMeetingRunning: ".bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] ))." -->";
         if( bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] )) == "true" ) {
             //
             // since the meeting is already running, we just join the session
