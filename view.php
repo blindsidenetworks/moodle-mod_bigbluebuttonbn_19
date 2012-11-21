@@ -208,6 +208,8 @@ echo '<script type="text/javascript" >var waitformoderator = "'.$bbbsession['tex
 echo '<script type="text/javascript" >var ismoderator = "'.$bbbsession['textflag']['moderator'].'";</script>'."\n";
 echo '<script type="text/javascript" >var meetingid = "'.$bbbsession['meetingid'].'";</script>'."\n";
 echo '<script type="text/javascript" >var joinurl = "'.$bbbsession['joinURL'].'";</script>'."\n";
+echo '<script type="text/javascript" >var wwwroot = "'.$CFG->wwwroot.'";</script>'."\n";
+
 
 if (!$bigbluebuttonbn->timeavailable ) {
     if (!$bigbluebuttonbn->timedue || time() <= $bigbluebuttonbn->timedue){
@@ -321,11 +323,13 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
 
     } else {    // "Viewer" && Waiting for moderator is required;
 
+        //print_object( bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] )) );
         echo '<script type="text/javascript" >var joining = "true";</script>'."\n";
 
         print "<div align='center'>";
-        print "<!-- IsMeetingRunning: ".bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] ))." -->";
-        if( bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] )) == "true" ) {
+        $xml = bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] )); 
+        if( $xml->running == "true" ) {
+        //if( bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_isMeetingRunning( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] )) == "true" ) {
             //
             // since the meeting is already running, we just join the session
             //

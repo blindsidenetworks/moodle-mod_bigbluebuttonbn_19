@@ -250,11 +250,10 @@ function bigbluebuttonbn_doEndMeeting( $meetingID, $modPW, $URL, $SALT ) {
 
 function bigbluebuttonbn_isMeetingRunning( $meetingID, $URL, $SALT ) {
     $xml = bigbluebuttonbn_wrap_simplexml_load_file( bigbluebuttonbn_getIsMeetingRunningURL( $meetingID, $URL, $SALT ) );
-    
-    if( $xml && $xml->returncode == 'SUCCESS' )
-        return ( ( $xml->running == 'true' ) ? true : false);
+    if( !$xml || $xml->returncode == 'FAILED' )
+        return false;
     else
-        return ( false );
+        return ( $xml->running == 'true' ) ? true : false;
 }
 
 
@@ -277,7 +276,6 @@ function bigbluebuttonbn_getMeetingXML( $meetingID, $URL, $SALT ) {
 }
 
 function bigbluebuttonbn_wrap_simplexml_load_file($url){
-    
     if (extension_loaded('curl')) {
         $ch = curl_init() or die ( curl_error() );
         $timeout = 10;
@@ -285,12 +283,17 @@ function bigbluebuttonbn_wrap_simplexml_load_file($url){
         curl_setopt( $ch, CURLOPT_URL, $url );
         curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $data = curl_exec( $ch );
-        curl_close( $ch );
+        
+        try{
+            $data = curl_exec( $ch );
+            curl_close( $ch );
+        }catch(Exception $e){
+            return false;
+        }
         
         if($data) {
             try{
-                $simpleXMLElement = new SimpleXMLElement($data,LIBXML_NOCDATA);
+                $simpleXMLElement = new SimpleXMLElement($data, LIBXML_NOCDATA);
                 return $simpleXMLElement;
             }catch(Exception $e){
                 return false;
