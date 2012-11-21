@@ -127,7 +127,7 @@ if( $bigbluebuttonbn->record )
 
 $bbbsession['timeavailable'] = $bigbluebuttonbn->timeavailable;
 $bbbsession['timedue'] = $bigbluebuttonbn->timedue;
-$bbbsession['timeduration'] = intval($bigbluebuttonbn->timeduration / 60);
+$bbbsession['timeduration'] = $bigbluebuttonbn->timeduration;
 if( $bbbsession['timeduration'] > 0 )
     $bbbsession['welcome'] .= '<br><br>'.str_replace("%duration%", ''.$bbbsession['timeduration'], get_string('bbbdurationwarning', 'bigbluebuttonbn'));
 
