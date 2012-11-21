@@ -65,8 +65,6 @@ if ( $bigbluebuttonbn->newwindow == 1 ){
     
     echo '<script type="text/javascript" >self.close();</script>'."\n";
     
-    //$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.viewend_CloseWindow');
-    
     print_footer($course);
         
 } else {
