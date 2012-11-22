@@ -46,14 +46,14 @@ if ($id) {
 }
 
 require_login($course, true, $cm);
-$context = get_context_instance(CONTEXT_MODULE, $cm->id);
 
+$context = get_context_instance(CONTEXT_MODULE, $cm->id);
 $moderator = has_capability('mod/bigbluebuttonbn:moderate', $context);
 $administrator = has_capability('moodle/category:manage', $context);
-add_to_log($course->id, 'bigbluebuttonbn', 'view', "view.php?id=$cm->id", $bigbluebuttonbn->name, $cm->id);
 
+add_to_log($course->id, 'bigbluebuttonbn', 'view', "view.php?id=$cm->id", $bigbluebuttonbn->name, $cm->id);
 //add_to_log($course->id, "bigbluebuttonbn", "join", "view.php?id=$cm->id", "$bigbluebuttonbn->id");
-// add_to_log($course->id, "bigbluebuttonbn", "join meeting", "view.php?course=$course->id&id=$USER->id", "$USER->id" );
+//add_to_log($course->id, "bigbluebuttonbn", "join meeting", "view.php?course=$course->id&id=$USER->id", "$USER->id" );
 
 //Validates if the BigBlueButton server is running
 //BigBlueButton server data
