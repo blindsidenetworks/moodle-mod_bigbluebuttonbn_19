@@ -90,10 +90,8 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
         //-------------------------------------------------------------------------------
         // add standard elements, common to all modules
-        $features = new stdClass;
-        $features->groups = true;
-        $features->grouping = true;
-        $features->groupmembersonly = true;
+        $features = array('groups'=>true, 'groupings'=>true, 'groupmembersonly'=>true,
+                'outcomes'=>false, 'gradecat'=>false, 'idnumber'=>true);
         $this->standard_coursemodule_elements($features);
         //-------------------------------------------------------------------------------
         // add standard buttons, common to all modules
