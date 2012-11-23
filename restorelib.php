@@ -50,17 +50,18 @@
             //Now, build the LABEL record structure
             $bigbluebuttonbn->course = $restore->course_id;
             $bigbluebuttonbn->name = backup_todb($info['MOD']['#']['NAME']['0']['#']);
-            $bigbluebuttonbn->moderatorpass= backup_todb($info['MOD']['#']['MODERATORPASS']['0']['#']);
-            $bigbluebuttonbn->viewerpass= backup_todb($info['MOD']['#']['VIEWERPASS']['0']['#']);
-            $bigbluebuttonbn->wait= backup_todb($info['MOD']['#']['WAIT']['0']['#']);
-            $bigbluebuttonbn->meetingid= backup_todb($info['MOD']['#']['MEETINGID']['0']['#']);
-            $bigbluebuttonbn->newwindow = backup_todb($info['MOD']['#']['NEWWINDOW']['0']['#']);
-            $bigbluebuttonbn->record = backup_todb($info['MOD']['#']['RECORD']['0']['#']);
-            $bigbluebuttonbn->description = backup_todb($info['MOD']['#']['DESCRIPTION']['0']['#']);
             $bigbluebuttonbn->welcome = backup_todb($info['MOD']['#']['WELCOME']['0']['#']);
-            $bigbluebuttonbn->voicebridge = backup_todb($info['MOD']['#']['VOICEBRIDGE']['0']['#']);
+            $bigbluebuttonbn->openoutside = backup_todb($info['MOD']['#']['OPENOUTSIDE']['0']['#']);
+            $bigbluebuttonbn->wait = backup_todb($info['MOD']['#']['WAIT']['0']['#']);
             $bigbluebuttonbn->timedue = backup_todb($info['MOD']['#']['TIMEDUE']['0']['#']);
             $bigbluebuttonbn->timeavailable = backup_todb($info['MOD']['#']['TIMEAVAILABLE']['0']['#']);
+            $bigbluebuttonbn->record = backup_todb($info['MOD']['#']['RECORD']['0']['#']);
+            $bigbluebuttonbn->description = backup_todb($info['MOD']['#']['DESCRIPTION']['0']['#']);
+            $bigbluebuttonbn->timeduration = backup_todb($info['MOD']['#']['TIMEDURATION']['0']['#']);
+            $bigbluebuttonbn->meetingid = backup_todb($info['MOD']['#']['MEETINGID']['0']['#']);
+            $bigbluebuttonbn->moderatorpass= backup_todb($info['MOD']['#']['MODERATORPASS']['0']['#']);
+            $bigbluebuttonbn->viewerpass = backup_todb($info['MOD']['#']['VIEWERPASS']['0']['#']);
+            $bigbluebuttonbn->voicebridge = backup_todb($info['MOD']['#']['VOICEBRIDGE']['0']['#']);
             $bigbluebuttonbn->timemodified = backup_todb($info['MOD']['#']['TIMEMODIFIED']['0']['#']);
 
             //The structure is equal to the db, so insert the bigbluebuttonbn

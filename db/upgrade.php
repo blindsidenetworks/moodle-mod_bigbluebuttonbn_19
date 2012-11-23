@@ -28,24 +28,12 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         $table = new XMLDBTable('bigbluebuttonbn');
         
     /// Adding new fields to table bigbluebuttonbn
-        $field = new XMLDBField('newwindow');
-        $field->setAttributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
-        add_field($table, $field, $continue=true, $feedback=true);
-        
-        $field = new XMLDBField('record');
-        $field->setAttributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
-        add_field($table, $field, $continue=true, $feedback=true);
-        
-        $field = new XMLDBField('description');
-        $field->setAttributes(XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, null, '');
-        add_field($table, $field, $continue=true, $feedback=true);
-
         $field = new XMLDBField('welcome');
         $field->setAttributes(XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null, null, '');
         add_field($table, $field, $continue=true, $feedback=true);
 
-        $field = new XMLDBField('voicebridge');
-        $field->setAttributes(XMLDB_TYPE_INTEGER, '5', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
+        $field = new XMLDBField('openoutside');
+        $field->setAttributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
         add_field($table, $field, $continue=true, $feedback=true);
         
         $field = new XMLDBField('timedue');
@@ -56,8 +44,20 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         $field->setAttributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
         add_field($table, $field, $continue=true, $feedback=true);
         
+        $field = new XMLDBField('record');
+        $field->setAttributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
+        add_field($table, $field, $continue=true, $feedback=true);
+        
+        $field = new XMLDBField('description');
+        $field->setAttributes(XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, null, '');
+        add_field($table, $field, $continue=true, $feedback=true);
+
         $field = new XMLDBField('timeduration');
         $field->setAttributes(XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
+        add_field($table, $field, $continue=true, $feedback=true);
+
+        $field = new XMLDBField('voicebridge');
+        $field->setAttributes(XMLDB_TYPE_INTEGER, '5', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0');
         add_field($table, $field, $continue=true, $feedback=true);
         
         ///////// bigbluebuttonbn_log

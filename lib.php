@@ -38,7 +38,7 @@ function bigbluebuttonbn_add_instance($bigbluebuttonbn) {
 	$bigbluebuttonbn->viewerpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string( 16 );
 	
-	if (! isset($bigbluebuttonbn->newwindow))   $bigbluebuttonbn->newwindow = 0;
+	if (! isset($bigbluebuttonbn->openoutside))   $bigbluebuttonbn->openoutside = 0;
 	if (! isset($bigbluebuttonbn->wait))        $bigbluebuttonbn->wait = 0;
 	if (! isset($bigbluebuttonbn->record))      $bigbluebuttonbn->record = 0;
 	
@@ -80,7 +80,7 @@ function bigbluebuttonbn_update_instance($bigbluebuttonbn) {
     $bigbluebuttonbn->timemodified = time();
     $bigbluebuttonbn->id = $bigbluebuttonbn->instance;
 
-    if (! isset($bigbluebuttonbn->newwindow))   $bigbluebuttonbn->newwindow = 0;
+    if (! isset($bigbluebuttonbn->openoutside))   $bigbluebuttonbn->openoutside = 0;
     if (! isset($bigbluebuttonbn->wait))        $bigbluebuttonbn->wait = 0;
     if (! isset($bigbluebuttonbn->record))      $bigbluebuttonbn->record = 0;
     
@@ -289,13 +289,13 @@ function bigbluebuttonbn_uninstall() {
 function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     global $CFG;
     
-    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $coursemodule->instance, '', '', '', '', 'id, name, newwindow')) {
+    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $coursemodule->instance, '', '', '', '', 'id, name, openoutside')) {
         return false;
     } else {
         $info = new object();
         $info->name  = $bigbluebuttonbn->name;
         
-        if ( $bigbluebuttonbn->newwindow == 1 ){
+        if ( $bigbluebuttonbn->openoutside == 1 ){
             $info->extra = "onclick=\"window.open('".$CFG->wwwroot."/mod/bigbluebuttonbn/view.php?id=".$coursemodule->id."&amp;redirect=1'); return false;\"";
         
         }

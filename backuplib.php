@@ -71,18 +71,18 @@
         fwrite ($bf,full_tag("ID",4,false,$bigbluebuttonbn->id));
         fwrite ($bf,full_tag("MODTYPE",4,false,"bigbluebuttonbn"));
         fwrite ($bf,full_tag("NAME",4,false,$bigbluebuttonbn->name));
-        fwrite ($bf,full_tag("MODERATORPASS",4,false,$bigbluebuttonbn->moderatorpass));
-        fwrite ($bf,full_tag("VIEWERPASS",4,false,$bigbluebuttonbn->viewerpass));
-        fwrite ($bf,full_tag("WAIT",4,false,$bigbluebuttonbn->wait));
-        fwrite ($bf,full_tag("NEWWINDOW",4,false,$bigbluebuttonbn->newwindow));
-        fwrite ($bf,full_tag("RECORD",4,false,$bigbluebuttonbn->record));
-        fwrite ($bf,full_tag("DESCRIPTION",4,false,$bigbluebuttonbn->description));
         fwrite ($bf,full_tag("WELCOME",4,false,$bigbluebuttonbn->welcome));
-        fwrite ($bf,full_tag("VOICEBRIDGE",4,false,$bigbluebuttonbn->voicebridge));
+        fwrite ($bf,full_tag("OPENOUTSIDE",4,false,$bigbluebuttonbn->openoutside));
+        fwrite ($bf,full_tag("WAIT",4,false,$bigbluebuttonbn->wait));
         fwrite ($bf,full_tag("TIMEDUE",4,false,$bigbluebuttonbn->timedue));
         fwrite ($bf,full_tag("TIMEAVAILABLE",4,false,$bigbluebuttonbn->timeavailable));
+        fwrite ($bf,full_tag("RECORD",4,false,$bigbluebuttonbn->record));
+        fwrite ($bf,full_tag("DESCRIPTION",4,false,$bigbluebuttonbn->description));
         fwrite ($bf,full_tag("TIMEDURATION",4,false,$bigbluebuttonbn->timeduration));
         fwrite ($bf,full_tag("MEETINGID",4,false,$bigbluebuttonbn->meetingid));
+        fwrite ($bf,full_tag("MODERATORPASS",4,false,$bigbluebuttonbn->moderatorpass));
+        fwrite ($bf,full_tag("VIEWERPASS",4,false,$bigbluebuttonbn->viewerpass));
+        fwrite ($bf,full_tag("VOICEBRIDGE",4,false,$bigbluebuttonbn->voicebridge));
         fwrite ($bf,full_tag("TIMEMODIFIED",4,false,$bigbluebuttonbn->timemodified));
         //End mod
         $status = fwrite ($bf,end_tag("MOD",3,true));

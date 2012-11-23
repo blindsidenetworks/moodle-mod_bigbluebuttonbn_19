@@ -48,8 +48,8 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         //$mform->setDefault( 'voicebridge', 0 );
         //$mform->addHelpButton('voicebridge', 'mod_form_field_voicebridge', 'bigbluebuttonbn');
         
-        $mform->addElement( 'checkbox', 'newwindow', get_string('mod_form_field_newwindow', 'bigbluebuttonbn') );
-        $mform->setDefault( 'newwindow', 0 );
+        $mform->addElement( 'checkbox', 'openoutside', get_string('mod_form_field_openoutside', 'bigbluebuttonbn') );
+        $mform->setDefault( 'openoutside', 0 );
         
         $mform->addElement( 'checkbox', 'wait', get_string('mod_form_field_wait', 'bigbluebuttonbn') );
         $mform->setDefault( 'wait', 1 );

@@ -116,10 +116,10 @@ if( !isset($bbbsession['welcome']) || $bbbsession['welcome'] == null || $bbbsess
 
 $bbbsession['voicebridge'] = $bigbluebuttonbn->voicebridge;
 $bbbsession['description'] = $bigbluebuttonbn->description;
-$bbbsession['flag']['newwindow'] = $bigbluebuttonbn->newwindow;
+$bbbsession['flag']['openoutside'] = $bigbluebuttonbn->openoutside;
 $bbbsession['flag']['wait'] = $bigbluebuttonbn->wait;
 $bbbsession['flag']['record'] = $bigbluebuttonbn->record;
-$bbbsession['textflag']['newwindow'] = $bigbluebuttonbn->newwindow? 'true':'false';
+$bbbsession['textflag']['openoutside'] = $bigbluebuttonbn->openoutside? 'true':'false';
 $bbbsession['textflag']['wait'] = $bigbluebuttonbn->wait? 'true': 'false';
 $bbbsession['textflag']['record'] = $bigbluebuttonbn->record? 'true': 'false';
 if( $bigbluebuttonbn->record )
@@ -203,7 +203,7 @@ echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/
 echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/bigbluebuttonbn.js"></script>'."\n";
 
 echo '<script type="text/javascript" >var logouturl = "'.$bbbsession['logoutURL'].'";</script>'."\n";
-echo '<script type="text/javascript" >var newwindow = "'.$bbbsession['textflag']['newwindow'].'";</script>'."\n";
+echo '<script type="text/javascript" >var openoutside = "'.$bbbsession['textflag']['openoutside'].'";</script>'."\n";
 echo '<script type="text/javascript" >var waitformoderator = "'.$bbbsession['textflag']['wait'].'";</script>'."\n";
 echo '<script type="text/javascript" >var ismoderator = "'.$bbbsession['textflag']['moderator'].'";</script>'."\n";
 echo '<script type="text/javascript" >var meetingid = "'.$bbbsession['meetingid'].'";</script>'."\n";
