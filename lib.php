@@ -38,10 +38,12 @@ function bigbluebuttonbn_add_instance($bigbluebuttonbn) {
 	$bigbluebuttonbn->viewerpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string( 16 );
 	
-	if (! isset($bigbluebuttonbn->openoutside))   $bigbluebuttonbn->openoutside = 0;
-	if (! isset($bigbluebuttonbn->wait))        $bigbluebuttonbn->wait = 0;
-	if (! isset($bigbluebuttonbn->record))      $bigbluebuttonbn->record = 0;
-	
+    if (! isset($bigbluebuttonbn->openoutside))     $bigbluebuttonbn->openoutside = 0;
+    if (! isset($bigbluebuttonbn->wait))            $bigbluebuttonbn->wait = 0;
+    if (! isset($bigbluebuttonbn->record))          $bigbluebuttonbn->record = 0;
+    if (! isset($bigbluebuttonbn->timeavailable))   $bigbluebuttonbn->timeavailable = 0;
+    if (! isset($bigbluebuttonbn->timedue))         $bigbluebuttonbn->timedue = 0;
+		
 	$returnid = insert_record('bigbluebuttonbn', $bigbluebuttonbn);
 	
 	if (isset($bigbluebuttonbn->timeavailable) && $bigbluebuttonbn->timeavailable ){
@@ -80,9 +82,11 @@ function bigbluebuttonbn_update_instance($bigbluebuttonbn) {
     $bigbluebuttonbn->timemodified = time();
     $bigbluebuttonbn->id = $bigbluebuttonbn->instance;
 
-    if (! isset($bigbluebuttonbn->openoutside))   $bigbluebuttonbn->openoutside = 0;
-    if (! isset($bigbluebuttonbn->wait))        $bigbluebuttonbn->wait = 0;
-    if (! isset($bigbluebuttonbn->record))      $bigbluebuttonbn->record = 0;
+    if (! isset($bigbluebuttonbn->openoutside))     $bigbluebuttonbn->openoutside = 0;
+    if (! isset($bigbluebuttonbn->wait))            $bigbluebuttonbn->wait = 0;
+    if (! isset($bigbluebuttonbn->record))          $bigbluebuttonbn->record = 0;
+    if (! isset($bigbluebuttonbn->timeavailable))   $bigbluebuttonbn->timeavailable = 0;
+    if (! isset($bigbluebuttonbn->timedue))         $bigbluebuttonbn->timedue = 0;
     
     update_record('bigbluebuttonbn', $bigbluebuttonbn);
     

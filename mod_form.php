@@ -61,9 +61,9 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('mod_form_block_schedule', 'bigbluebuttonbn'));
         
         $mform->addElement('date_time_selector', 'timeavailable', get_string('mod_form_field_availabledate', 'bigbluebuttonbn'), array('optional'=>true));
-        $mform->setDefault('timeavailable', time());
+        $mform->setDefault('timeavailable', 0);
         $mform->addElement('date_time_selector', 'timedue', get_string('mod_form_field_duedate', 'bigbluebuttonbn'), array('optional' => true));
-        $mform->setDefault('timedue', time()+3600);
+        $mform->setDefault('timedue', 0);
         //-------------------------------------------------------------------------------
         // Second block ends here
         //-------------------------------------------------------------------------------
