@@ -1,6 +1,6 @@
 <?php
 /**
- * Join a room.
+ * Library calls for Moodle and BigBlueButton.
  *
  * Authors:
  *      Fred Dixon (ffdixon [at] blindsidenetworks [dt] org)
@@ -27,13 +27,6 @@ require_once($CFG->dirroot.'/calendar/lib.php');
  */
 function bigbluebuttonbn_add_instance($bigbluebuttonbn) {
 
-    $bigbluebuttonbn->timecreated = time();
-
-	if (record_exists( 'bigbluebuttonbn', 'meetingID', $bigbluebuttonbn->name)) {
-		error("A meeting with that name already exists.");
-		return false;
-	}
-
 	$bigbluebuttonbn->moderatorpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->viewerpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string( 16 );
@@ -43,29 +36,33 @@ function bigbluebuttonbn_add_instance($bigbluebuttonbn) {
     if (! isset($bigbluebuttonbn->record))          $bigbluebuttonbn->record = 0;
     if (! isset($bigbluebuttonbn->timeavailable))   $bigbluebuttonbn->timeavailable = 0;
     if (! isset($bigbluebuttonbn->timedue))         $bigbluebuttonbn->timedue = 0;
-		
-	$returnid = insert_record('bigbluebuttonbn', $bigbluebuttonbn);
-	
-	if (isset($bigbluebuttonbn->timeavailable) && $bigbluebuttonbn->timeavailable ){
-	    $event = NULL;
-	    $event->name        = $bigbluebuttonbn->name;
-	    $event->courseid    = $bigbluebuttonbn->course;
-	    $event->groupid     = 0;
-	    $event->userid      = 0;
-	    $event->modulename  = 'bigbluebuttonbn';
-	    $event->instance    = $returnid;
-	    $event->timestart   = $bigbluebuttonbn->timeavailable;
-	
-	    if ( $bigbluebuttonbn->timedue ){
-	        $event->timeduration = $bigbluebuttonbn->timedue - $bigbluebuttonbn->timeavailable;
-	    } else {
-	        $event->timeduration = 0;
-	    }
-	
-	    calendar_event::create($event);
-	}
-	
-	return $returnid;
+    
+    if( $returnid = insert_record('bigbluebuttonbn', $bigbluebuttonbn) ){
+        $bigbluebuttonbn->id = $returnid;
+	    
+        if ( $bigbluebuttonbn->timeavailable ){
+            $event = new object();
+            $event->name        = $bigbluebuttonbn->name;
+            //$event->description = $bigbluebutton->welcome;
+            $event->courseid    = $bigbluebuttonbn->course;
+            $event->groupid     = 0;
+            $event->userid      = 0;
+            $event->modulename  = 'bigbluebuttonbn';
+            $event->instance    = $returnid;
+            $event->timestart   = $bigbluebuttonbn->timeavailable;
+    
+            if ( $bigbluebuttonbn->timedue ){
+                $event->timeduration = $bigbluebuttonbn->timedue - $bigbluebuttonbn->timeavailable;
+            } else {
+                $event->timeduration = 0;
+            }
+    
+            add_event($event);
+        }
+
+    }
+
+    return $returnid;
 }
 
 
@@ -88,11 +85,14 @@ function bigbluebuttonbn_update_instance($bigbluebuttonbn) {
     if (! isset($bigbluebuttonbn->timeavailable))   $bigbluebuttonbn->timeavailable = 0;
     if (! isset($bigbluebuttonbn->timedue))         $bigbluebuttonbn->timedue = 0;
     
-    update_record('bigbluebuttonbn', $bigbluebuttonbn);
+    if (!update_record('bigbluebuttonbn', $bigbluebuttonbn)) {
+        return false;
+    }
     
-    if (isset($bigbluebuttonbn->timeavailable) && $bigbluebuttonbn->timeavailable ){
-        $event = new stdClass();
+    if ($bigbluebuttonbn->timeavailable ){
+        $event = new object();
         $event->name        = $bigbluebuttonbn->name;
+        //$event->description = $bigbluebutton->welcome;
         $event->courseid    = $bigbluebuttonbn->course;
         $event->groupid     = 0;
         $event->userid      = 0;
@@ -108,12 +108,13 @@ function bigbluebuttonbn_update_instance($bigbluebuttonbn) {
             
         }
 
-        if ($event->id = get_field('event', 'id', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id))) {
-            $calendarevent = calendar_event::load($event->id);
-            $calendarevent->update($event);
+        if ($event->id = get_field('event', 'id', 'modulename', 'bigbluebuttonbn', 'instance', $bigbluebuttonbn->id) ) {
+            print "to update";
+            update_event($event);
             
         } else {
-            calendar_event::create($event);
+            print "to add";
+            add_event($event);
             
         }
         
@@ -144,18 +145,6 @@ function bigbluebuttonbn_delete_instance($id) {
 
     $result = true;
 
-    //
-    // End the session associated with this instance (if it's running)
-    //
-    $meetingID = $bigbluebuttonbn->meetingid.'-'.$bigbluebuttonbn->course.'-'.$bigbluebuttonbn->id;
-    
-    $modPW = $bigbluebuttonbn->moderatorpass;
-    $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
-    $salt = trim($CFG->BigBlueButtonBNSecuritySalt);
-
-    //if( bigbluebuttonbn_isMeetingRunning($meetingID, $url, $salt) )
-    //    $getArray = bigbluebuttonbn_doEndMeeting( $meetingID, $modPW, $url, $salt );
-    	
     if (! delete_records('bigbluebuttonbn', 'id', $bigbluebuttonbn->id)) {
         $result = false;
     }

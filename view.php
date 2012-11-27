@@ -213,48 +213,43 @@ echo '<script type="text/javascript" >var wwwroot = "'.$CFG->wwwroot.'";</script
 
 if (!$bigbluebuttonbn->timeavailable ) {
     if (!$bigbluebuttonbn->timedue || time() <= $bigbluebuttonbn->timedue){
-        print_object("GO JOINING 1");
         //GO JOINING
         bigbluebuttonbn_view_joining( $bbbsession );
 
     } else {
-        print_object("CALLING AFTER 1");
         //CALLING AFTER
-        echo $OUTPUT->heading(get_string('bbbfinished', 'bigbluebuttonbn'));
-        echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
+        print_heading(get_string('bbbfinished', 'bigbluebuttonbn'));
+        print_box_start();
 
         bigbluebuttonbn_view_after( $bbbsession );
-
-        echo $OUTPUT->box_end();
-
+        
+        print_box_end();
     }
 
 } else if ( time() < $bigbluebuttonbn->timeavailable ){
-    print_object("CALLING BEFORE");
     //CALLING BEFORE
-    echo $OUTPUT->heading(get_string('bbbnotavailableyet', 'bigbluebuttonbn'));
-    echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
+    print_heading(get_string('bbbnotavailableyet', 'bigbluebuttonbn'));
+    print_box_start();
 
     bigbluebuttonbn_view_before( $bbbsession );
 
-    echo $OUTPUT->box_end();
-
+    print_box_end();
+    
 } else if (!$bigbluebuttonbn->timedue || time() <= $bigbluebuttonbn->timedue ) {
-    print_object("GO JOINING 2");
     //GO JOINING
     bigbluebuttonbn_view_joining( $bbbsession );
 
 } else {
-    print_object("CALLING AFTER 2");
     //CALLING AFTER
-    echo $OUTPUT->heading(get_string('bbbfinished', 'bigbluebuttonbn'));
-    echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
-
+    print_heading(get_string('bbbfinished', 'bigbluebuttonbn'));
+    print_box_start();
+    
     bigbluebuttonbn_view_after( $bbbsession );
 
-    echo $OUTPUT->box_end();
-
+    print_box_end();
+    
 }
+
 
 // Finish the page
 print_footer($course);
