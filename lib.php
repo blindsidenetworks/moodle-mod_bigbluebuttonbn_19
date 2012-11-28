@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Join a room.
+ * Library calls for Moodle and BigBlueButton.
  *
  * Authors:
  *      Fred Dixon (ffdixon [at] blindsidenetworks [dt] org)
@@ -12,7 +11,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 
-require_once('bbb_api/bbb_api.php');
+defined('MOODLE_INTERNAL') || die;
+
+require_once($CFG->dirroot.'/calendar/lib.php');
 
 
 /**
@@ -26,18 +27,42 @@ require_once('bbb_api/bbb_api.php');
  */
 function bigbluebuttonbn_add_instance($bigbluebuttonbn) {
 
-    $bigbluebuttonbn->timecreated = time();
-
-	if (record_exists( 'bigbluebuttonbn', 'meetingID', $bigbluebuttonbn->name)) {
-		error("A meeting with that name already exists.");
-		return false;
-	}
-
 	$bigbluebuttonbn->moderatorpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->viewerpass = bigbluebuttonbn_rand_string( 16 );
 	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string( 16 );
+	
+    if (! isset($bigbluebuttonbn->openoutside))     $bigbluebuttonbn->openoutside = 0;
+    if (! isset($bigbluebuttonbn->wait))            $bigbluebuttonbn->wait = 0;
+    if (! isset($bigbluebuttonbn->record))          $bigbluebuttonbn->record = 0;
+    if (! isset($bigbluebuttonbn->timeavailable))   $bigbluebuttonbn->timeavailable = 0;
+    if (! isset($bigbluebuttonbn->timedue))         $bigbluebuttonbn->timedue = 0;
+    
+    if( $returnid = insert_record('bigbluebuttonbn', $bigbluebuttonbn) ){
+        $bigbluebuttonbn->id = $returnid;
+	    
+        if ( $bigbluebuttonbn->timeavailable ){
+            $event = new object();
+            $event->name        = $bigbluebuttonbn->name;
+            //$event->description = $bigbluebutton->welcome;
+            $event->courseid    = $bigbluebuttonbn->course;
+            $event->groupid     = 0;
+            $event->userid      = 0;
+            $event->modulename  = 'bigbluebuttonbn';
+            $event->instance    = $returnid;
+            $event->timestart   = $bigbluebuttonbn->timeavailable;
+    
+            if ( $bigbluebuttonbn->timedue ){
+                $event->timeduration = $bigbluebuttonbn->timedue - $bigbluebuttonbn->timeavailable;
+            } else {
+                $event->timeduration = 0;
+            }
+    
+            add_event($event);
+        }
 
-	return insert_record('bigbluebuttonbn', $bigbluebuttonbn);
+    }
+
+    return $returnid;
 }
 
 
@@ -54,14 +79,52 @@ function bigbluebuttonbn_update_instance($bigbluebuttonbn) {
     $bigbluebuttonbn->timemodified = time();
     $bigbluebuttonbn->id = $bigbluebuttonbn->instance;
 
-	if (! isset($bigbluebuttonbn->wait)) {
-		$bigbluebuttonbn->wait = 0;
-	}
+    if (! isset($bigbluebuttonbn->openoutside))     $bigbluebuttonbn->openoutside = 0;
+    if (! isset($bigbluebuttonbn->wait))            $bigbluebuttonbn->wait = 0;
+    if (! isset($bigbluebuttonbn->record))          $bigbluebuttonbn->record = 0;
+    if (! isset($bigbluebuttonbn->timeavailable))   $bigbluebuttonbn->timeavailable = 0;
+    if (! isset($bigbluebuttonbn->timedue))         $bigbluebuttonbn->timedue = 0;
+    
+    if (!update_record('bigbluebuttonbn', $bigbluebuttonbn)) {
+        return false;
+    }
+    
+    if ($bigbluebuttonbn->timeavailable ){
+        $event = new object();
+        $event->name        = $bigbluebuttonbn->name;
+        //$event->description = $bigbluebutton->welcome;
+        $event->courseid    = $bigbluebuttonbn->course;
+        $event->groupid     = 0;
+        $event->userid      = 0;
+        $event->modulename  = 'bigbluebuttonbn';
+        $event->instance    = $bigbluebuttonbn->id;
+        $event->timestart   = $bigbluebuttonbn->timeavailable;
 
+        if ( $bigbluebuttonbn->timedue ){
+            $event->timeduration = $bigbluebuttonbn->timedue - $bigbluebuttonbn->timeavailable;
+            
+        } else {
+            $event->timeduration = 0;
+            
+        }
 
-    # You may have to add extra stuff in here #
-
-    return update_record('bigbluebuttonbn', $bigbluebuttonbn);
+        if ($event->id = get_field('event', 'id', 'modulename', 'bigbluebuttonbn', 'instance', $bigbluebuttonbn->id) ) {
+            print "to update";
+            update_event($event);
+            
+        } else {
+            print "to add";
+            add_event($event);
+            
+        }
+        
+    } else {
+        delete_records('event', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id));
+        
+    }
+    
+    return true;
+   
 }
 
 
@@ -82,23 +145,14 @@ function bigbluebuttonbn_delete_instance($id) {
 
     $result = true;
 
-    //
-	// End the session associated with this instance (if it's running)
-	//
-	$meetingID = $bigbluebuttonbn->meetingid;
-	$modPW = $bigbluebuttonbn->moderatorpass;
-	$url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
-	$salt = trim($CFG->bigbluebuttonbnSecuritySalt);
-
-	$getArray = BigBlueButtonBN::endMeeting( $meetingID, $modPW, $url, $salt );
-	
     if (! delete_records('bigbluebuttonbn', 'id', $bigbluebuttonbn->id)) {
-    	//echo $endURL = '<a href='.BBBMeeting::endMeeting( $mToken, "mp", getBBBServerIP(), $salt ).'>'."End Meeting".'</a>';
-#switch to remove the meetingname
-#    	  BBBMeeting::endMeeting( $bigbluebuttonbn->, "mp", getBBBServerIP(), $bigbluebuttonbn->salt );
         $result = false;
     }
-
+    
+    if (! delete_records('event', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id))) {
+        $result = false;
+    }
+    
     return $result;
 }
 
@@ -114,7 +168,7 @@ function bigbluebuttonbn_delete_instance($id) {
  * @todo Finish documenting this function
  */
 function bigbluebuttonbn_user_outline($course, $user, $mod, $bigbluebuttonbn) {
-    return $return;
+    return true;
 }
 
 
@@ -166,10 +220,16 @@ function bigbluebuttonbn_cron () {
  * @return mixed boolean/array of students
  */
 function bigbluebuttonbn_get_participants($bigbluebuttonbnid) {
-    global $CFG;
     return false;
 }
 
+/**
+ * Returns all other caps used in module
+ * @return array
+ */
+function bigbluebuttonbn_get_extra_capabilities() {
+    return array('moodle/site:accessallgroups');
+}
 
 /**
  * Checks if scale is being used by any instance of bigbluebuttonbn.
@@ -209,25 +269,32 @@ function bigbluebuttonbn_uninstall() {
     return true;
 }
 
+/**
+ * Given a course_module object, this function returns any
+ * "extra" information that may be needed when printing
+ * this activity in a course listing.
+ * See get_array_of_activities() in course/lib.php
+ *
+ * @global object
+ * @param object $coursemodule
+ * @return object|null
+ */
+function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
+    global $CFG;
 
-//////////////////////////////////////////////////////////////////////////////////////
-/// Any other bigbluebuttonbn functions go here.  Each of them must have a name that
-/// starts with bigbluebuttonbn_
-/// Remember (see note in first lines) that, if this section grows, it's HIGHLY
-/// recommended to move all funcions below to a new "localib.php" file.
-
-# function taken from http://www.php.net/manual/en/function.mt-rand.php
-# modified by Sebastian Schneider
-# credits go to www.mrnaz.com
-function bigbluebuttonbn_rand_string($len, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-{
-    $string = '';
-    for ($i = 0; $i < $len; $i++)
-    {
-        $pos = rand(0, strlen($chars)-1);
-        $string .= $chars{$pos};
+    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $coursemodule->instance, '', '', '', '', 'id, name, openoutside')) {
+        return false;
+    } else {
+        $info = new object();
+        $info->name  = $bigbluebuttonbn->name;
+        
+        if ( $bigbluebuttonbn->openoutside == 1 ){
+            $info->extra = "onClick=\"window.open('".$CFG->wwwroot."/mod/bigbluebuttonbn/view.php?id=".$coursemodule->id."&amp;redirect=1'); return false;\"";
+        
+        }
+        return $info;
     }
-    return (sha1($string));
+
 }
 
 ?>
