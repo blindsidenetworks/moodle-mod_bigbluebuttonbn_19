@@ -209,6 +209,7 @@ echo '<script type="text/javascript" >var ismoderator = "'.$bbbsession['textflag
 echo '<script type="text/javascript" >var meetingid = "'.$bbbsession['meetingid'].'";</script>'."\n";
 echo '<script type="text/javascript" >var joinurl = "'.$bbbsession['joinURL'].'";</script>'."\n";
 echo '<script type="text/javascript" >var wwwroot = "'.$CFG->wwwroot.'";</script>'."\n";
+echo '<script type="text/javascript" >var cmid = "'.$cm->id.'";</script>'."\n";
 
 
 if (!$bigbluebuttonbn->timeavailable ) {
