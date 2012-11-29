@@ -42,7 +42,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $mform->addRule( 'name', null, 'required', null, 'client' );
         
         $mform->addElement('textarea', 'welcome', get_string('mod_form_field_welcome','bigbluebuttonbn'), 'wrap="virtual" rows="5" cols="60"');
-        $mform->setHelpButton('welcome', array('welcome', get_string('mod_form_field_welcome', 'bigbluebuttonbn' ), 'bigbluebuttonbn', true, false, get_string('mod_form_field_welcome_help', 'bigbluebuttonbn') ) );
+        $mform->setHelpButton('welcome', array('welcome', get_string('mod_form_field_welcome', 'bigbluebuttonbn' ), 'bigbluebuttonbn' ) );
         
         //$mform->addElement('text', 'voicebridge', get_string('mod_form_field_voicebridge','bigbluebuttonbn'), 'maxlength="5" size="10"' );
         //$mform->setDefault( 'voicebridge', 0 );
@@ -81,7 +81,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             
             $mform->addElement('text', 'timeduration', get_string('mod_form_field_duration', 'bigbluebuttonbn'), 'maxlength="4" size="6"' ); //Set zero for unlimited
             $mform->setDefault('timeduration', '240');
-            $mform->setHelpButton('timeduration', array('timeduration', get_string('mod_form_field_duration', 'bigbluebuttonbn' ), 'bigbluebuttonbn', true, false, get_string('mod_form_field_duration_help', 'bigbluebuttonbn') ) );
+            $mform->setHelpButton('timeduration', array('timeduration', get_string('mod_form_field_duration', 'bigbluebuttonbn' ), 'bigbluebuttonbn' ) );
         }
         //-------------------------------------------------------------------------------
         // Third block ends here

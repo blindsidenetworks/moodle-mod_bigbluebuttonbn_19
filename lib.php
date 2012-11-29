@@ -119,7 +119,7 @@ function bigbluebuttonbn_update_instance($bigbluebuttonbn) {
         }
         
     } else {
-        delete_records('event', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id));
+        delete_records('event', 'modulename', 'bigbluebuttonbn', 'instance', $bigbluebuttonbn->id);
         
     }
     
@@ -149,7 +149,7 @@ function bigbluebuttonbn_delete_instance($id) {
         $result = false;
     }
     
-    if (! delete_records('event', array('modulename'=>'bigbluebuttonbn', 'instance'=>$bigbluebuttonbn->id))) {
+    if (! delete_records('event', 'modulename', 'bigbluebuttonbn', 'instance', $bigbluebuttonbn->id)) {
         $result = false;
     }
     
