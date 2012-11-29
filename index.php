@@ -92,7 +92,7 @@ if( isset($_POST['submit']) && $_POST['submit'] == 'end' && $moderator) {
 }
 
 foreach ($bigbluebuttonbns as $bigbluebuttonbn) {
-    $cm = get_coursemodule_from_id('bigbluebuttonbn', $bigbluebuttonbn->coursemodule, 0, false, MUST_EXIST);
+    $cm = get_coursemodule_from_id('bigbluebuttonbn', $bigbluebuttonbn->coursemodule);
 
     if ( groups_get_activity_groupmode($cm) > 0 ){
         $groups = groups_get_activity_allowed_groups($cm);
