@@ -96,9 +96,12 @@ update_module_button($cm->id, $course->id, $strbigbluebuttonbn), navmenu($course
 //
 // BigBlueButton Setup
 //
+$bbbsession['bigbluebuttonbnid'] = $bigbluebuttonbn->id;
+
 //Server data
 $bbbsession['modPW'] = $bigbluebuttonbn->moderatorpass;
 $bbbsession['viewerPW'] = $bigbluebuttonbn->viewerpass;
+
 //User data
 $bbbsession['username'] = $USER->firstname.' '.$USER->lastname;
 $bbbsession['userID'] = $USER->id;
@@ -111,7 +114,7 @@ $bbbsession['textflag']['administrator'] = $administrator? 'true': 'false';
 $bbbsession['meetingname'] = $bigbluebuttonbn->name;
 $bbbsession['welcome'] = $bigbluebuttonbn->welcome;
 if( !isset($bbbsession['welcome']) || $bbbsession['welcome'] == null || $bbbsession['welcome'] == '') {
-    $bbbsession['welcome'] = get_string('mod_form_field_welcome_default', 'bigbluebuttonbn'); 
+    $bbbsession['welcome'] = str_replace("<CONFNAME>", "%%CONFNAME%%", get_string('mod_form_field_welcome_default', 'bigbluebuttonbn'));
 }
 
 $bbbsession['voicebridge'] = $bigbluebuttonbn->voicebridge;
@@ -129,7 +132,7 @@ $bbbsession['timeavailable'] = $bigbluebuttonbn->timeavailable;
 $bbbsession['timedue'] = $bigbluebuttonbn->timedue;
 $bbbsession['timeduration'] = $bigbluebuttonbn->timeduration;
 if( $bbbsession['timeduration'] > 0 )
-    $bbbsession['welcome'] .= '<br><br>'.str_replace("%duration%", ''.$bbbsession['timeduration'], get_string('bbbdurationwarning', 'bigbluebuttonbn'));
+    $bbbsession['welcome'] .= '<br><br>'.str_replace("<DURATION>", ''.$bbbsession['timeduration'], get_string('bbbdurationwarning', 'bigbluebuttonbn'));
 
 //Additional info related to the course
 $bbbsession['coursename'] = $course->fullname;
@@ -152,7 +155,6 @@ $bbbsession['context'] = $course->fullname;
 $bbbsession['contextActivity'] = $bigbluebuttonbn->name;
 $bbbsession['contextActivityDescription'] = $bigbluebuttonbn->description;
 
-$bbbsession['bigbluebuttonbnid'] = $bigbluebuttonbn->id;
 /// find out current groups mode
 groups_print_activity_menu($cm, $CFG->wwwroot . '/mod/bigbluebuttonbn/view.php?id=' . $cm->id);
 if (groups_get_activity_groupmode($cm) == 0) {  //No groups mode

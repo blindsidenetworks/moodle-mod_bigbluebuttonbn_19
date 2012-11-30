@@ -12,7 +12,7 @@
  */
 
 $string['bbbduetimeoverstartingtime'] = 'The due time for this activity must be greater than the starting time';
-$string['bbbdurationwarning'] = 'The maximum duration for this session is %duration% minutes.';
+$string['bbbdurationwarning'] = 'The maximum duration for this session is <DURATION> minutes.';
 $string['bbbfinished'] = 'This activity is over.';
 $string['bbbinprocess'] = 'This activity is in process.';
 $string['bbbnorecordings'] = 'There is no recording yet, please come back later.';
@@ -53,26 +53,17 @@ $string['mod_form_block_schedule'] = 'Schedule for sessions';
 $string['mod_form_field_availabledate'] = 'Join open';
 $string['mod_form_field_description'] = 'Description of recorded session';
 $string['mod_form_field_duedate'] = 'Join closed';
-$string['mod_form_field_duration_help'] = 'Setting the duration for a meeting will establish the maximum time for a meeting to keep alive before the recording finish';
 $string['mod_form_field_duration'] = 'Duration';
 $string['mod_form_field_limitusers'] = 'Limit users';
-$string['mod_form_field_limitusers_help'] = 'Maximum limit of users allowed in a meeting';
 $string['mod_form_field_name'] = 'Virtual classroom name';
 $string['mod_form_field_openoutside'] = 'Open BigBlueButton in a new window';
 $string['mod_form_field_record'] = 'Record';
-$string['mod_form_field_voicebridge_help'] = 'Voice conference number that participants enter to join the voice conference.';
 $string['mod_form_field_voicebridge'] = 'Voice bridge';
 $string['mod_form_field_wait'] = 'Students must wait until a moderator joins';
-$string['mod_form_field_welcome_default'] = '<br>Welcome to <b>%%CONFNAME%%</b>!<br><br>To understand how BigBlueButton works see our <a href="event:http://www.bigbluebutton.org/content/videos"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the headset icon (upper-left hand corner). <b>Please use a headset to avoid causing noise for others.</b>';
-$string['mod_form_field_welcome_help'] = 'Replaces the default message setted up for the BigBlueButton server. The message can includes keywords  (%%CONFNAME%%, %%DIALNUM%%, %%CONFNUM%%) which will be substituted automatically, and also html tags like <b>...</b> or <i></i> ';
+$string['mod_form_field_welcome_default'] = '<br>Welcome to <b><CONFNAME></b>!<br><br>To understand how BigBlueButton works see our <a href=\"event:http://www.bigbluebutton.org/content/videos\"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the headset icon (upper-left hand corner). <b>Please use a headset to avoid causing noise for others.</b>';
 $string['mod_form_field_welcome'] = 'Welcome message';
 $string['modulename'] = 'BigBlueButtonBN';
 $string['modulenameplural'] = 'BigBlueButtonBN';
-$string['modulename_help'] = 'BigBlueButtonBN lets you create from within Moodle links to real-time on-line classrooms using BigBlueButton, an open source web conferencing system for distance education.
-
-Using BigBlueButtonBN you can specify for the title, description, calendar entry (which gives a date range for joining the session), groups, and details about the recording of the on-line session.
-
-To view later recordings, add a RecordingsBN resource to this course.';
 $string['modulename_link'] = 'BigBlueButtonBN/view';
 $string['pluginadministration'] = 'BigBlueButton administration';
 $string['pluginname'] = 'BigBlueButtonBN';
