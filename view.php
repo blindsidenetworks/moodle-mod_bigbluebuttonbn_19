@@ -205,7 +205,7 @@ if (!$bigbluebuttonbn->timeavailable ) {
     if (!$bigbluebuttonbn->timedue || time() <= $bigbluebuttonbn->timedue){
         //GO JOINING
         $bigbluebuttonbn_view = 'join';
-        bigbluebuttonbn_view_joining( $bbbsession );
+        $joining = bigbluebuttonbn_view_joining( $bbbsession );
 
     } else {
         //CALLING AFTER
@@ -231,7 +231,7 @@ if (!$bigbluebuttonbn->timeavailable ) {
 } else if (!$bigbluebuttonbn->timedue || time() <= $bigbluebuttonbn->timedue ) {
     //GO JOINING
     $bigbluebuttonbn_view = 'join';
-    bigbluebuttonbn_view_joining( $bbbsession );
+    $joining = bigbluebuttonbn_view_joining( $bbbsession );
 
 } else {
     //CALLING AFTER
@@ -245,30 +245,24 @@ if (!$bigbluebuttonbn->timeavailable ) {
     
 }
 
-///JavaScript variables
-//echo '<script type="text/javascript" >var logouturl = "'.$bbbsession['logoutURL'].'";</script>'."\n";
-//echo '<script type="text/javascript" >var wwwroot = "'.$CFG->wwwroot.'";</script>'."\n";
-
+/// JavaScript variables
 $jsVars = array(
-        'newwindow' => $bbbsession['textflag']['newwindow'],
+        'openoutside' => $bbbsession['textflag']['openoutside'],
         'waitformoderator' => $bbbsession['textflag']['wait'],
         'ismoderator' => $bbbsession['textflag']['moderator'],
         'meetingid' => $bbbsession['meetingid'],
         'joinurl' => $bbbsession['joinURL'],
         'joining' => ($joining? 'true':'false'),
-        'bigbluebuttonbn_view' => $bigbluebuttonbn_view
+        'bigbluebuttonbn_view' => $bigbluebuttonbn_view,
+        'wwwroot' => $CFG->wwwroot
 );
 
-$jsmodule = array(
-        'name'     => 'mod_bigbluebuttonbn',
-        'fullpath' => '/mod/bigbluebuttonbn/module.js',
-        'requires' => array('datasource-get', 'datasource-jsonschema', 'datasource-polling'),
-);
-//$PAGE->requires->data_for_js('bigbluebuttonbn', $jsVars);
-//$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.init_view', array(), false, $jsmodule);
-require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/module.js');
+echo '<script type="text/javascript" >var bigbluebuttonbn = '.json_encode($jsVars).';</script>'."\n";
+require_js(array('yui_yahoo', 'yui_event', 'yui_dom', 'yui_connection', 'yui_json', 'yui_datasource'));
+require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/ping_ajax.js');
+echo '<script type="text/javascript" >mod_bigbluebuttonbn_ping();</script>'."\n";
 
-// Finish the page
+/// Finish the page
 print_footer($course);
 
 
@@ -354,7 +348,8 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
         print "</div>";
 
     }
-
+    
+    return $joining;
 }
 
 function bigbluebuttonbn_view_before( $bbbsession ){
