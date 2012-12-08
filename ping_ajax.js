@@ -1,91 +1,55 @@
-function YUI() {
-
-    var loadUrl = bigbluebuttonbn.wwwroot + "/mod/bigbluebuttonbn/ping.php?meetingid=" + bigbluebuttonbn.meetingid;
-    //var loadUrl = bigbluebuttonbn.wwwroot + "/mod/bigbluebuttonbn/ping.php?";
-
-    var callback = {
-        success : function(o) {
-            eval('var response = '+ o.responseText);
-            console.debug(response);
-            //document.getElementById('mydiv').innerHTML = o.responseText;
-        },
-        failure : function(o) {
-            console.debug(o.statusText);
-        }
-    }
-    //YAHOO.util.Connect.setPollingInterval(1000);
-    var transaction = YAHOO.util.Connect.asyncRequest('GET', loadUrl, callback, null);
-    console.debug(transaction);
-    return false;
-}
-
-
-//mod_bigbluebuttonbn = mod_bigbluebuttonbn || {};
+// mod_bigbluebuttonbn = mod_bigbluebuttonbn || {};
 
 mod_bigbluebuttonbn_ping = function() {
 
     if (bigbluebuttonbn.joining == 'true') {
-        if (bigbluebuttonbn.ismoderator == 'true' || bigbluebuttonbn.waitformoderator == 'false') {
+        if (bigbluebuttonbn.ismoderator == 'true'
+                || bigbluebuttonbn.waitformoderator == 'false') {
             mod_bigbluebuttonbn_joinURL();
         } else {
-            
+
             ////////////////
-            /*  */
-            var dataSource = new YAHOO.util.DataSource(bigbluebuttonbn.wwwroot + "/mod/bigbluebuttonbn/ping.php?meetingid=" + bigbluebuttonbn.meetingid);
-            dataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
-            dataSource.responseSchema = {status: "status"};
-            dataSource.maxCacheEntries = 5;
+            var dataSource = new YAHOO.util.XHRDataSource(
+                    bigbluebuttonbn.wwwroot + "/mod/bigbluebuttonbn/ping.php?meetingid=" + bigbluebuttonbn.meetingid);
+            dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSARRAY;
+            dataSource.responseSchema = {
+                fields : [ 'status' ]
+            };
+            dataSource.maxCacheEntries = 1;
 
-            var callback = {
-                success : function() {
-                    console.debug('success');
-                    console.debug(dataSource);
-
-
-                    //console.debug(o);
-                    //eval('var data = '+ o.responseText);
-                    //console.debug(data.status);
-                    //if (data.status == 'true') {
-                    //    mod_bigbluebuttonbn_joinURL();
-                    //}
+            var dsRequest = null;
+            var dsCallback = {
+                argument : null,
+                failure : function(oRequest, oParsedResponse, oPayload) {
+                    console.debug(oParsedResponse.statusText);
                 },
-                failure : function() {
-                    console.debug("Polling failure");
+                scope : window,
+                success : function(oRequest, oParsedResponse, oPayload) {
+                    /// Validation code should be here, implemented with doBeforeParseData to work around a problem pasing the data
+                    //var results = oParsedResponse.results;
+                    //console.debug(results);
                 }
-            }
-            dataSource.setInterval(5000, null, callback)
-            
+            };
 
-            
-            /*
-            var loadUrl = bigbluebuttonbn.wwwroot + "/mod/bigbluebuttonbn/ping.php?meetingid=" + bigbluebuttonbn.meetingid;
-
-            var callback = {
-                success : function(o) {
-                    eval('var data = '+ o.responseText);
-                    console.debug(data.status);
-                    if (data.status == 'true') {
-                        mod_bigbluebuttonbn_joinURL();
-                    }
-                },
-                failure : function(o) {
-                    console.debug(o.statusText);
+            /// Validation code
+            dataSource.doBeforeParseData = function(oRequest, oFullResponse, oCallback) {
+                eval('var data = ' + oFullResponse);
+                if (data[0] == true) {
+                    mod_bigbluebuttonbn_joinURL();
                 }
-            }
-            //YAHOO.util.Connect.setPollingInterval(1000);
-            var transaction = YAHOO.util.Connect.asyncRequest('GET', loadUrl, callback, null);
-            */
-            //////////////////
-            
+            };
 
+            var txnId = dataSource.setInterval(5000, dsRequest, dsCallback);
+            // dataSource.sendRequest(dsRequest, dsCallback);
+            // ////////////////
         }
     }
-    
+
     return false;
 
 }
 
 mod_bigbluebuttonbn_joinURL = function() {
-    console.debug(bigbluebuttonbn.joinurl);
-    //window.location = bigbluebuttonbn.joinurl;
+    //console.debug(bigbluebuttonbn.joinurl);
+    window.location = bigbluebuttonbn.joinurl;
 };

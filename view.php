@@ -258,7 +258,7 @@ $jsVars = array(
 );
 
 echo '<script type="text/javascript" >var bigbluebuttonbn = '.json_encode($jsVars).';</script>'."\n";
-require_js(array('yui_yahoo', 'yui_event', 'yui_dom', 'yui_connection', 'yui_json', 'yui_datasource'));
+require_js(array('yui_yahoo', 'yui_event', 'yui_datasource', 'yui_json', 'yui_connection', 'yui_get'));
 require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/ping_ajax.js');
 echo '<script type="text/javascript" >mod_bigbluebuttonbn_ping();</script>'."\n";
 

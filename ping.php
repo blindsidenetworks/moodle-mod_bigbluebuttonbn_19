@@ -25,7 +25,7 @@ if (!$meetingID) {
 //}
 
 //header('Content-Type: application/json; charset=utf-8');
-header('Content-Type: text/plain; charset=utf-8');
+header('Content-Type: text/json; charset=utf-8');
 if ( !isset($error) ) {
 
     //if (!isloggedin() && $PAGE->course->id == SITEID) {
@@ -47,8 +47,7 @@ if ( !isset($error) ) {
         try{
             $ismeetingrunning = (bigbluebuttonbn_isMeetingRunning( $meetingID, $url, $salt )? 'true': 'false');
             //echo $callback.'({ "status": "'.$ismeetingrunning.'" });';
-            echo '{ status : '.$ismeetingrunning.' }';
-            //echo 'helloworld';
+            echo '['.$ismeetingrunning.']';
         }catch(Exception $e){
             header("HTTP/1.0 502 Bad Gateway. ".$e->getMessage());
         }
