@@ -196,31 +196,20 @@ if( $moderator)
 else
     $bbbsession['joinURL'] = bigbluebuttonbn_getJoinURL($bbbsession['meetingid'], $bbbsession['username'], $bbbsession['viewerPW'], $bbbsession['salt'], $bbbsession['url'], $bbbsession['userID']);
 
-//
-// BigBlueButton Setup Ends
-//
+/// BigBlueButton Setup Ends
+//////////////////////////////////////////
 
-echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/libs/jquery/1.7.2/jquery.min.js"></script>'."\n";
-echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/libs/heartbeat/0.1.1/heartbeat.js"></script>'."\n";
-echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/bigbluebuttonbn.js"></script>'."\n";
-
-echo '<script type="text/javascript" >var logouturl = "'.$bbbsession['logoutURL'].'";</script>'."\n";
-echo '<script type="text/javascript" >var openoutside = "'.$bbbsession['textflag']['openoutside'].'";</script>'."\n";
-echo '<script type="text/javascript" >var waitformoderator = "'.$bbbsession['textflag']['wait'].'";</script>'."\n";
-echo '<script type="text/javascript" >var ismoderator = "'.$bbbsession['textflag']['moderator'].'";</script>'."\n";
-echo '<script type="text/javascript" >var meetingid = "'.$bbbsession['meetingid'].'";</script>'."\n";
-echo '<script type="text/javascript" >var joinurl = "'.$bbbsession['joinURL'].'";</script>'."\n";
-echo '<script type="text/javascript" >var wwwroot = "'.$CFG->wwwroot.'";</script>'."\n";
-echo '<script type="text/javascript" >var cmid = "'.$cm->id.'";</script>'."\n";
-
-
+$joining = false;
+$bigbluebuttonbn_view = '';
 if (!$bigbluebuttonbn->timeavailable ) {
     if (!$bigbluebuttonbn->timedue || time() <= $bigbluebuttonbn->timedue){
         //GO JOINING
-        bigbluebuttonbn_view_joining( $bbbsession );
+        $bigbluebuttonbn_view = 'join';
+        $joining = bigbluebuttonbn_view_joining( $bbbsession );
 
     } else {
         //CALLING AFTER
+        $bigbluebuttonbn_view = 'after';
         print_heading(get_string('bbbfinished', 'bigbluebuttonbn'));
         print_box_start();
 
@@ -231,6 +220,7 @@ if (!$bigbluebuttonbn->timeavailable ) {
 
 } else if ( time() < $bigbluebuttonbn->timeavailable ){
     //CALLING BEFORE
+    $bigbluebuttonbn_view = 'before';
     print_heading(get_string('bbbnotavailableyet', 'bigbluebuttonbn'));
     print_box_start();
 
@@ -240,10 +230,12 @@ if (!$bigbluebuttonbn->timeavailable ) {
     
 } else if (!$bigbluebuttonbn->timedue || time() <= $bigbluebuttonbn->timedue ) {
     //GO JOINING
-    bigbluebuttonbn_view_joining( $bbbsession );
+    $bigbluebuttonbn_view = 'join';
+    $joining = bigbluebuttonbn_view_joining( $bbbsession );
 
 } else {
     //CALLING AFTER
+    $bigbluebuttonbn_view = 'after';
     print_heading(get_string('bbbfinished', 'bigbluebuttonbn'));
     print_box_start();
     
@@ -253,14 +245,31 @@ if (!$bigbluebuttonbn->timeavailable ) {
     
 }
 
+/// JavaScript variables
+$jsVars = array(
+        'openoutside' => $bbbsession['textflag']['openoutside'],
+        'waitformoderator' => $bbbsession['textflag']['wait'],
+        'ismoderator' => $bbbsession['textflag']['moderator'],
+        'meetingid' => $bbbsession['meetingid'],
+        'joinurl' => $bbbsession['joinURL'],
+        'joining' => ($joining? 'true':'false'),
+        'bigbluebuttonbn_view' => $bigbluebuttonbn_view,
+        'wwwroot' => $CFG->wwwroot
+);
 
-// Finish the page
+echo '<script type="text/javascript" >var bigbluebuttonbn = '.json_encode($jsVars).';</script>'."\n";
+require_js(array('yui_yahoo', 'yui_event', 'yui_datasource', 'yui_json', 'yui_connection', 'yui_get'));
+require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/ping_ajax.js');
+echo '<script type="text/javascript" >mod_bigbluebuttonbn_ping();</script>'."\n";
+
+/// Finish the page
 print_footer($course);
 
 
 function bigbluebuttonbn_view_joining( $bbbsession ){
-    echo '<script type="text/javascript" >var bigbluebuttonbn_view = "join";</script>'."\n";
-
+    
+    $joining = false;
+    
     if( $bbbsession['flag']['moderator'] || !$bbbsession['flag']['wait'] ) {  // If is a moderator or if is a viewer and no waiting is required
         //
         // Join directly
@@ -304,8 +313,8 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
                 print get_string('view_groups_selection', 'bigbluebuttonbn' )."&nbsp;&nbsp;<input type='button' onClick='bigbluebuttonbn_joinURL()' value='".get_string('view_groups_selection_join', 'bigbluebuttonbn' )."'>";
 
             } else {
-                print '<script type="text/javascript" >var joining = "true";</script>';
-
+                $joining = true;
+                
                 if( $bbbsession['flag']['moderator'] )
                     print "<br />".get_string('view_login_moderator', 'bigbluebuttonbn' )."<br /><br />";
                 else
@@ -319,8 +328,8 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
     } else {    // "Viewer" && Waiting for moderator is required;
 
         //print_object( bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] )) );
-        echo '<script type="text/javascript" >var joining = "true";</script>'."\n";
-
+        $joining = true;
+        
         print "<div align='center'>";
         $xml = bigbluebuttonbn_wrap_simplexml_load_file(bigbluebuttonbn_getIsMeetingRunningURL( $bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt'] )); 
         if( $xml->running == "true" ) {
@@ -339,7 +348,8 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
         print "</div>";
 
     }
-
+    
+    return $joining;
 }
 
 function bigbluebuttonbn_view_before( $bbbsession ){

@@ -13,46 +13,48 @@
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/locallib.php');
 
-$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
-$a  = optional_param('a', 0, PARAM_INT);  // bigbluebuttonbn instance ID
-
-if ($id) {
-    if (! $cm = get_coursemodule_from_id('bigbluebuttonbn', $id)) {
-        error('Course Module ID was incorrect');
-    }
-
-    if (! $course = get_record('course', 'id', $cm->course)) {
-        error('Course is misconfigured');
-    }
-
-    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $cm->instance)) {
-        error('Course module is incorrect');
-    }
-
-} else if ($a) {
-    if (! $bigbluebuttonbn = get_record('bigbluebuttonbn', 'id', $a)) {
-        error('Course module is incorrect');
-    }
-    if (! $course = get_record('course', 'id', $bigbluebuttonbn->course)) {
-        error('Course is misconfigured');
-    }
-    if (! $cm = get_coursemodule_from_instance('bigbluebuttonbn', $bigbluebuttonbn->id, $course->id)) {
-        error('Course Module ID was incorrect');
-    }
-
-} else {
-    error('You must specify a course_module ID or an instance ID');
-}
-
-require_login($course, true);
-
-$url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
-$salt = trim($CFG->bigbluebuttonbnSecuritySalt);
-
+$callback = optional_param('callback', "", PARAM_TEXT);
 $meetingID = optional_param('meetingid', 0, PARAM_TEXT);
-if( $meetingID ){
-    echo bigbluebuttonbn_getMeetingXML( $meetingID, $url, $salt );
-} else {
-    echo 'false';
+    
+if (!$meetingID) {
+    $error = 'You must specify a meetingid';
 }
 
+//if (!$callback) {
+//    $error = 'This call must include a javascript callback';
+//}
+
+//header('Content-Type: application/json; charset=utf-8');
+header('Content-Type: text/json; charset=utf-8');
+if ( !isset($error) ) {
+
+    //if (!isloggedin() && $PAGE->course->id == SITEID) {
+    //    $userid = guest_user()->id;
+    //} else {
+    //    $userid = $USER->id;
+    //}
+    //$hascourseaccess = ($PAGE->course->id == SITEID) || can_access_course($PAGE->course, $userid);
+
+    $hascourseaccess = true;
+    
+    if( !$hascourseaccess ){
+        header("HTTP/1.0 401 Unauthorized");
+        //http_response_code(401);
+    } else {
+        $salt = trim($CFG->bigbluebuttonbnSecuritySalt);
+        $url = trim(trim($CFG->bigbluebuttonbnServerURL),'/').'/';
+
+        try{
+            $ismeetingrunning = (bigbluebuttonbn_isMeetingRunning( $meetingID, $url, $salt )? 'true': 'false');
+            //echo $callback.'({ "status": "'.$ismeetingrunning.'" });';
+            echo '['.$ismeetingrunning.']';
+        }catch(Exception $e){
+            header("HTTP/1.0 502 Bad Gateway. ".$e->getMessage());
+        }
+        
+    }
+
+} else {
+    header("HTTP/1.0 400 Bad Request. ".$error);
+    //http_response_code(400);
+}
