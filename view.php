@@ -309,7 +309,6 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
             bigbluebuttonbn_log($bbbsession, 'Create');
             
             if ( groups_get_activity_groupmode($bbbsession['cm']) > 0 && count(groups_get_activity_allowed_groups($bbbsession['cm'])) > 1 ){
-                print '<script type="text/javascript" >var joining = "false";</script>';
                 print get_string('view_groups_selection', 'bigbluebuttonbn' )."&nbsp;&nbsp;<input type='button' onClick='bigbluebuttonbn_joinURL()' value='".get_string('view_groups_selection_join', 'bigbluebuttonbn' )."'>";
 
             } else {
@@ -354,11 +353,6 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
 
 function bigbluebuttonbn_view_before( $bbbsession ){
 
-    echo '<script type="text/javascript" >'."\n";
-    echo '    var joining = "false";'."\n";
-    echo '    var bigbluebuttonbn_view = "before";'."\n";
-    echo '</script>'."\n";
-
     echo '<table>';
     if ($bbbsession['timeavailable']) {
         echo '<tr><td class="c0">'.get_string('mod_form_field_availabledate','bigbluebuttonbn').':</td>';
@@ -373,17 +367,6 @@ function bigbluebuttonbn_view_before( $bbbsession ){
 }
 
 function bigbluebuttonbn_view_after( $bbbsession ){
-
-    echo '<script type="text/javascript" >'."\n";
-    echo '    var joining = "false";'."\n";
-    echo '    var bigbluebuttonbn_view = "after";'."\n";
-    echo '    var view_recording_list_recording = "'.get_string('view_recording_list_recording', 'bigbluebuttonbn').'";'."\n";
-    echo '    var view_recording_list_course = "'.get_string('view_recording_list_course', 'bigbluebuttonbn').'";'."\n";
-    echo '    var view_recording_list_activity = "'.get_string('view_recording_list_activity', 'bigbluebuttonbn').'";'."\n";
-    echo '    var view_recording_list_description = "'.get_string('view_recording_list_description', 'bigbluebuttonbn').'";'."\n";
-    echo '    var view_recording_list_date = "'.get_string('view_recording_list_date', 'bigbluebuttonbn').'";'."\n";
-    echo '    var view_recording_list_actionbar = "'.get_string('view_recording_list_actionbar', 'bigbluebuttonbn').'";'."\n";
-    echo '</script>'."\n";
 
     $recordingsArray = bigbluebuttonbn_getRecordingsArray($bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt']);
 
