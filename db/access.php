@@ -36,7 +36,7 @@ $mod_bigbluebuttonbn_capabilities = array(
 	        'editingteacher' => CAP_ALLOW,
 	        'admin' => CAP_ALLOW
 	    )
-	),
+	)
 );
 
 ?>
