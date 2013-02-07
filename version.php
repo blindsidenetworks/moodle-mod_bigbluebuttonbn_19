@@ -12,7 +12,7 @@
  */
 
 
-$module->version  = 2013020112;
+$module->version  = 2013020113;
 $module->requires = 2007101591.12;
 $module->cron     = 0;
 $module->component = 'mod_bigbluebuttonbn';

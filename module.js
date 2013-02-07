@@ -13,8 +13,7 @@ M.mod_bigbluebuttonbn = M.mod_bigbluebuttonbn || {};
 M.mod_bigbluebuttonbn.init_view = function(Y) {
 
     if (bigbluebuttonbn.joining == 'true') {
-        if (bigbluebuttonbn.ismoderator == 'true'
-                || bigbluebuttonbn.waitformoderator == 'false') {
+        if (bigbluebuttonbn.ismoderator == 'true' || bigbluebuttonbn.waitformoderator == 'false') {
             M.mod_bigbluebuttonbn.joinURL();
         } else {
 
@@ -43,7 +42,6 @@ M.mod_bigbluebuttonbn.init_view = function(Y) {
 };
 
 M.mod_bigbluebuttonbn.joinURL = function() {
-    // console.debug(bigbluebuttonbn.joinurl);
     window.location = bigbluebuttonbn.joinurl;
 };
 
