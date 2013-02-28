@@ -27,9 +27,9 @@ require_once($CFG->dirroot.'/calendar/lib.php');
  */
 function bigbluebuttonbn_add_instance($bigbluebuttonbn) {
 
-	$bigbluebuttonbn->moderatorpass = bigbluebuttonbn_rand_string( 16 );
-	$bigbluebuttonbn->viewerpass = bigbluebuttonbn_rand_string( 16 );
-	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string( 16 );
+	$bigbluebuttonbn->moderatorpass = bigbluebuttonbn_rand_string();
+	$bigbluebuttonbn->viewerpass = bigbluebuttonbn_rand_string();
+	$bigbluebuttonbn->meetingid = bigbluebuttonbn_rand_string();
 	
     if (! isset($bigbluebuttonbn->openoutside))     $bigbluebuttonbn->openoutside = 0;
     if (! isset($bigbluebuttonbn->wait))            $bigbluebuttonbn->wait = 0;
