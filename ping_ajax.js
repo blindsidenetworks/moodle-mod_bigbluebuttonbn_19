@@ -50,6 +50,5 @@ mod_bigbluebuttonbn_ping = function() {
 }
 
 mod_bigbluebuttonbn_joinURL = function() {
-    //console.debug(bigbluebuttonbn.joinurl);
     window.location = bigbluebuttonbn.joinurl;
 };

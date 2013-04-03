@@ -61,7 +61,6 @@ $navigation = build_navigation($navlinks);
 if ( $bigbluebuttonbn->openoutside == 1 ){
     print_header_simple(format_string($bigbluebuttonbn->name), '', $navigation, '', '', true,
     update_module_button($cm->id, $course->id, $strbigbluebuttonbn), navmenu($course, $cm));
-    echo '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/js/bigbluebuttonbn.js"></script>'."\n";
     
     echo '<script type="text/javascript" >self.close();</script>'."\n";
     

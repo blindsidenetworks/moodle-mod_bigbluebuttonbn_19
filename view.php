@@ -188,7 +188,7 @@ if (groups_get_activity_groupmode($cm) == 0) {  //No groups mode
 
     $bbbsession['meetingid'] = $bigbluebuttonbn->meetingid.'-'.$bbbsession['courseid'].'-'.$bbbsession['bigbluebuttonbnid'].'['.$bbbsession['group'].']';
     //if ($moderator) // Take off the option visible groups
-    //    $PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.setusergroups');
+    //    $PAGE->requires->js_init_call('mod_bigbluebuttonbn.setusergroups');
 }
 
 if( $moderator)
@@ -260,6 +260,7 @@ $jsVars = array(
 echo '<script type="text/javascript" >var bigbluebuttonbn = '.json_encode($jsVars).';</script>'."\n";
 require_js(array('yui_yahoo', 'yui_event', 'yui_datasource', 'yui_json', 'yui_connection', 'yui_get'));
 require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/ping_ajax.js');
+require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/module.js');
 echo '<script type="text/javascript" >mod_bigbluebuttonbn_ping();</script>'."\n";
 
 /// Finish the page
@@ -309,7 +310,7 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
             bigbluebuttonbn_log($bbbsession, 'Create');
             
             if ( groups_get_activity_groupmode($bbbsession['cm']) > 0 && count(groups_get_activity_allowed_groups($bbbsession['cm'])) > 1 ){
-                print get_string('view_groups_selection', 'bigbluebuttonbn' )."&nbsp;&nbsp;<input type='button' onClick='M.mod_bigbluebuttonbn.joinURL' value='".get_string('view_groups_selection_join', 'bigbluebuttonbn' )."'>";
+                print get_string('view_groups_selection', 'bigbluebuttonbn' )."&nbsp;&nbsp;<input type='button' onClick='mod_bigbluebuttonbn.joinURL(); return false;' value='".get_string('view_groups_selection_join', 'bigbluebuttonbn' )."'>";
 
             } else {
                 $joining = true;

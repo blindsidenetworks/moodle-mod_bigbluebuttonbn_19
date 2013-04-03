@@ -1,7 +1,7 @@
 /**
  * @namespace
  */
-M.mod_bigbluebuttonbn = M.mod_bigbluebuttonbn || {};
+mod_bigbluebuttonbn = {};
 
 /**
  * This function is initialized from PHP
@@ -10,11 +10,11 @@ M.mod_bigbluebuttonbn = M.mod_bigbluebuttonbn || {};
  *            Y YUI instance
  */
 
-M.mod_bigbluebuttonbn.init_view = function(Y) {
+mod_bigbluebuttonbn.init_view = function(Y) {
 
     if (bigbluebuttonbn.joining == 'true') {
         if (bigbluebuttonbn.ismoderator == 'true' || bigbluebuttonbn.waitformoderator == 'false') {
-            M.mod_bigbluebuttonbn.joinURL();
+            mod_bigbluebuttonbn.joinURL();
         } else {
 
             var dataSource = new Y.DataSource.Get({
@@ -26,7 +26,7 @@ M.mod_bigbluebuttonbn.init_view = function(Y) {
                 callback : {
                     success : function(e) {
                         if (e.data.status == 'true') {
-                            M.mod_bigbluebuttonbn.joinURL();
+                            mod_bigbluebuttonbn.joinURL();
                         }
                     },
                     failure : function(e) {
@@ -41,22 +41,23 @@ M.mod_bigbluebuttonbn.init_view = function(Y) {
     }
 };
 
-M.mod_bigbluebuttonbn.joinURL = function() {
+mod_bigbluebuttonbn.joinURL = function() {
     window.location = bigbluebuttonbn.joinurl;
 };
 
-M.mod_bigbluebuttonbn.modform_Editting = function() {
+mod_bigbluebuttonbn.modform_Editting = function() {
+    console.debug("Hello Editting");
     var elSel = document.getElementsByName('groupmode')[0];
     if (elSel.length > 0) {
         elSel.remove(elSel.length - 1);
     }
 }
 
-M.mod_bigbluebuttonbn.viewend_CloseWindow = function() {
+mod_bigbluebuttonbn.viewend_CloseWindow = function() {
     window.close();
 }
 
-M.mod_bigbluebuttonbn.setusergroups = function() {
+mod_bigbluebuttonbn.setusergroups = function() {
     var elSel = document.getElementsByName('group')[0];
     if (elSel.length > 0) {
         elSel.options[0].text = 'Select group';

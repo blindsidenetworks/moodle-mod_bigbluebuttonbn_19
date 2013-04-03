@@ -33,7 +33,7 @@ Obtaining the source
 ====================
 This GitHub repostiory at
 
-  https://github.com/blindsidenetworks/moodle-mod_bigbluebutton/tree/master/moodle19/bigbluebuttonbn
+  https://github.com/blindsidenetworks/moodle-mod_bigbluebuttonbn_19
 
 contains the latest source.  If you want to use the latest packaged snapshot, you can download it from
 

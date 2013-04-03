@@ -22,6 +22,8 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
     function definition() {
 
         global $CFG, $PAGE;
+
+        require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/module.js');
         
         //Validates if the BigBlueButton server is running
         //BigBlueButton server data
@@ -97,13 +99,9 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         // add standard buttons, common to all modules
         $this->add_action_buttons();
         
-        if ( isset($current_activity->add) ){
-            // If is adding the activity, turn off the schedule by default & Take off the option [visible groups]
-            //$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.modform_Adding');
-        } else {
-            // Take off the option [visible groups]
-            //$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.modform_Editting');
-        }
+        // Take off the option [visible groups]
+        //echo '<script type="text/javascript" >mod_bigbluebuttonbn.modform_Editting();</script>'."\n";
+        //$PAGE->requires->js_init_call('mod_bigbluebuttonbn.modform_Editting');
         
     }
     
