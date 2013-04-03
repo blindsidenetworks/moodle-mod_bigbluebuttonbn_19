@@ -16,6 +16,7 @@ require_once(dirname(__FILE__).'/locallib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // course_module ID, or
 $a  = optional_param('a', 0, PARAM_INT);  // bigbluebuttonbn instance ID
+$group  = optional_param('group', 0, PARAM_INT);  // bigbluebuttonbn instance ID
 
 if ($id) {
     if (! $cm = get_coursemodule_from_id('bigbluebuttonbn', $id)) {
@@ -161,34 +162,8 @@ if (groups_get_activity_groupmode($cm) == 0) {  //No groups mode
     $bbbsession['meetingid'] = $bigbluebuttonbn->meetingid.'-'.$bbbsession['courseid'].'-'.$bbbsession['bigbluebuttonbnid'];
 } else {                                        // Separate groups mode
     //If doesnt have group
-    $bbbsession['group'] = groups_get_activity_group($cm);
-    if( $bbbsession['group'] == '0' ){
-        if ( $bbbsession['flag']['administrator'] ) {
-            $groups_in_activity = groups_get_activity_allowed_groups($cm);
-            if ( count($groups_in_activity) == 0 ){ //There are no groups at all
-                print_error( 'view_error_no_group', 'bigbluebuttonbn', $CFG->wwwroot.'/course/view.php?id='.$course->id );
-                exit;
-            } else { // There is only 1 group
-                $bbbsession['group'] = current($groups_in_activity)->id;
-            }
-        } else if ( $bbbsession['flag']['moderator'] ) {
-            $groups_in_activity = groups_get_activity_allowed_groups($cm);
-            if ( count($groups_in_activity) == 0 ){ //There are no groups at all
-                print_error( 'view_error_no_group_teacher', 'bigbluebuttonbn', $CFG->wwwroot.'/course/view.php?id='.$course->id );
-                exit;
-            } else { // There is only 1 group
-                $bbbsession['group'] = current($groups_in_activity)->id;
-            }
-        } else {
-            print_error( 'view_error_no_group_student', 'bigbluebuttonbn', $CFG->wwwroot.'/course/view.php?id='.$course->id );
-            exit;
-        }
-
-    }
-
+    $bbbsession['group'] = (!$group)?groups_get_activity_group($cm): $group;
     $bbbsession['meetingid'] = $bigbluebuttonbn->meetingid.'-'.$bbbsession['courseid'].'-'.$bbbsession['bigbluebuttonbnid'].'['.$bbbsession['group'].']';
-    //if ($moderator) // Take off the option visible groups
-    //    $PAGE->requires->js_init_call('mod_bigbluebuttonbn.setusergroups');
 }
 
 if( $moderator)
@@ -260,7 +235,6 @@ $jsVars = array(
 echo '<script type="text/javascript" >var bigbluebuttonbn = '.json_encode($jsVars).';</script>'."\n";
 require_js(array('yui_yahoo', 'yui_event', 'yui_datasource', 'yui_json', 'yui_connection', 'yui_get'));
 require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/ping_ajax.js');
-require_js($CFG->wwwroot.'/mod/bigbluebuttonbn/module.js');
 echo '<script type="text/javascript" >mod_bigbluebuttonbn_ping();</script>'."\n";
 
 /// Finish the page
@@ -306,11 +280,10 @@ function bigbluebuttonbn_view_joining( $bbbsession ){
             print_error( get_string( 'index_error_forciblyended', 'bigbluebuttonbn' ));
 
         } else { ///////////////Everything is ok /////////////////////
-            
             bigbluebuttonbn_log($bbbsession, 'Create');
             
-            if ( groups_get_activity_groupmode($bbbsession['cm']) > 0 && count(groups_get_activity_allowed_groups($bbbsession['cm'])) > 1 ){
-                print get_string('view_groups_selection', 'bigbluebuttonbn' )."&nbsp;&nbsp;<input type='button' onClick='mod_bigbluebuttonbn.joinURL(); return false;' value='".get_string('view_groups_selection_join', 'bigbluebuttonbn' )."'>";
+            if ( groups_get_activity_groupmode($bbbsession['cm']) == 1 && count(groups_get_activity_allowed_groups($bbbsession['cm'])) > 1 || groups_get_activity_groupmode($bbbsession['cm']) == 2){
+                print "&nbsp;&nbsp;".get_string('view_groups_selection', 'bigbluebuttonbn' )."&nbsp;&nbsp;<input type='button' onClick='mod_bigbluebuttonbn_joinURL(); return false;' value='".get_string('view_groups_selection_join', 'bigbluebuttonbn' )."'>";
 
             } else {
                 $joining = true;
